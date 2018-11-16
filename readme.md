@@ -20,7 +20,7 @@
 #### Project 1 : Edge, Keypoint, Cursor Detection
 * [Problem Statement](https://github.com/crazysal/AwesomeReadingMaterial/blob/master/cvip2018UB/pro1_cse573.pdf)
 * [Data](https://github.com/crazysal/AwesomeReadingMaterial/blob/master/cvip2018UB/proj1_cse573.zip)
-#### Project 2 : Edge, Keypoint, Cursor Detection
+#### Project 2 : Image Features, Homography, Epipolar Geometry and Clustering
 * [Problem Statement](https://github.com/crazysal/AwesomeReadingMaterial/blob/master/cvip2018UB/cse573_proj2_rev3.pdf)
 * [Data](https://github.com/crazysal/AwesomeReadingMaterial/blob/master/cvip2018UB/proj2_data.zip)
 
