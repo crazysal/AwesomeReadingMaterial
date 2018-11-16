@@ -46,12 +46,12 @@
 * [Interpretability of ML in Medical Imaging](https://github.com/crazysal/AwesomeReadingMaterial/blob/master/medical/interpretability%20of%20ml%20in%20medical)
 
 ----
+----
+----
+
 ## NLP 
-
-
 ### Graduate Course Work Lectures  
 ##### University Of Cambridge :
-
 >    Introduction. Brief history of NLP research, current applications, components of NLP systems.
 >    Finite-state techniques. Inflectional and derivational morphology, finite-state automata in NLP, finite-state transducers.
 >    Prediction and part-of-speech tagging. Corpora, simple N-grams, word prediction, stochastic tagging, evaluating system performance.
@@ -73,7 +73,6 @@
 >    Applications. Examples of practical applications of NLP techniques. 
 * [Natural Language Processing | Prof Ann Copestake | University of Cambridge | Slides 12](https://github.com/crazysal/computational-linguistics/blob/master/cheatSheatsProlog/lecture12.ppt)
 ----
-
 ##### State University of New York
 >	LexicalProcessing 1 : Lemmatization, Automata and Transducers | Chapter 2 & 3 : JM '09
 * [CSE 567 Computational Linguistics | Prof Rui Chaves | SUNY Buffalo| Slides 1](https://github.com/crazysal/computational-linguistics/blob/master/cheatSheatsProlog/rui_chaves/LexicalProcessing1.pdf)
@@ -114,7 +113,6 @@
 >	Machine Translation | Chapter 25 : JM '25 
 * [CSE 567 Computational Linguistics | Prof Rui Chaves | SUNY Buffalo| Slides 19](https://github.com/crazysal/computational-linguistics/blob/master/cheatSheatsProlog/rui_chaves/mt.pdf)
 ----
-
 ### Prolog
 * [Quick–’n’–Dirty Prolog Tutorial : CSC245 | Introduction to Discrete Structures Fall 2004 McCann](https://github.com/crazysal/computational-linguistics/blob/master/cheatSheatsProlog/Quick%E2%80%93%E2%80%99n%E2%80%99%E2%80%93Dirty%0AProlog%0ATutorial.pdf)
 
@@ -127,10 +125,8 @@
 ### Suggested readings
 * Jurafsky & Martin 2009.
 [Speech and language processing](https://web.stanford.edu/~jurafsky/slp3/)
-
 * Manning and Schutze 2000.
 	Foundations of statistical natural language processing , The MITPress.  [book available here](https://nlp.stanford.edu/fsnlp/)
-
 * Bender 2013
 	Linguistic Fundamentals for Natural Language Processing: 100 Essentials from Morphology and Syntax Synthesis Lectures on Human Language Technologies ,  Morgan and Claypool Publishers.  [book available here](https://www.morganclaypool.com/doi/abs/10.2200/S00493ED1V01Y201303HLT020)
 * Ojeda  2013 
@@ -140,7 +136,6 @@
 ----
 
 ### Experiments
-
 * [Interesting Stuff](http://www.cl.cam.ac.uk/~aac10/stuff.html)
 * [Sample Chart Parsing Code by Paula Buttery | lecture 4](http://www.cl.cam.ac.uk/~aac10/java-parser/)
 * [Bottom Up Chart Parser in Prolog](https://github.com/crazysal/computational-linguistics/blob/master/experiments/chart_bottom_up.pl)
