@@ -1,0 +1,2560 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"  
+  "http://www.w3.org/TR/html4/loose.dtd">  
+<html > 
+<head><title>4 Learning in PDP Models: The Pattern Associator</title> 
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"> 
+<meta name="generator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)"> 
+<meta name="originator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)"> 
+<!-- 2,frames,html --> 
+<meta name="src" content="handbook.tex"> 
+<meta name="date" content="2015-12-16 23:36:00"> 
+<link rel="stylesheet" type="text/css" href="handbook.css"> 
+</head><body 
+>
+   <!--l. 3--><div class="crosslinks"><p class="noindent"><a 
+href="handbookch6.html" ><span 
+class="cmsy-7">&#x21D2;</span></a><a 
+href="handbookch4.html" ><span 
+class="cmsy-7">&#x21D0;</span></a><a 
+href="handbook3.html#handbookch5.html" ><span 
+class="cmsy-7">&#x21D1;</span></a></p></div>
+   <h2 class="chapterHead"><span class="titlemark">Chapter&#x00A0;4</span><br /><a 
+ id="x11-510004"></a>Learning in PDP Models: The Pattern Associator</h2><div class="chapterTOCS">
+   &#x00A0;<span class="sectionToc" >4.1 <a 
+href="#x11-520004.1">BACKGROUND</a></span>
+<br />   &#x00A0;&#x00A0;<span class="subsectionToc" >4.1.1 <a 
+href="#x11-530004.1.1">The Hebb Rule</a></span>
+<br />   &#x00A0;&#x00A0;<span class="subsectionToc" >4.1.2 <a 
+href="#x11-540004.1.2">The Delta Rule</a></span>
+<br />   &#x00A0;&#x00A0;<span class="subsectionToc" >4.1.3 <a 
+href="#x11-550004.1.3">Division of Labor in Error Correcting Learning</a></span>
+<br />   &#x00A0;&#x00A0;<span class="subsectionToc" >4.1.4 <a 
+href="#x11-560004.1.4">The Linear Predictability Constraint</a></span>
+<br />   &#x00A0;<span class="sectionToc" >4.2 <a 
+href="#x11-570004.2">THE PATTERN ASSOCIATOR</a></span>
+<br />   &#x00A0;&#x00A0;<span class="subsectionToc" >4.2.1 <a 
+href="#x11-580004.2.1">The Hebb Rule in Pattern Associator Models</a></span>
+<br />   &#x00A0;&#x00A0;<span class="subsectionToc" >4.2.2 <a 
+href="#x11-590004.2.2">The Delta Rule in Pattern Associator Models</a></span>
+<br />   &#x00A0;&#x00A0;<span class="subsectionToc" >4.2.3 <a 
+href="#x11-600004.2.3">Linear Predictability and the Linear Independence Requirement</a></span>
+<br />   &#x00A0;&#x00A0;<span class="subsectionToc" >4.2.4 <a 
+href="#x11-610004.2.4">Nonlinear Pattern Associators</a></span>
+<br />   &#x00A0;<span class="sectionToc" >4.3 <a 
+href="#x11-620004.3">THE FAMILY OF PATTERN ASSOCIATOR MODELS</a></span>
+<br />   &#x00A0;&#x00A0;<span class="subsectionToc" >4.3.1 <a 
+href="#x11-630004.3.1">Activation Functions</a></span>
+<br />   &#x00A0;&#x00A0;<span class="subsectionToc" >4.3.2 <a 
+href="#x11-640004.3.2">Learning Assumptions</a></span>
+<br />   &#x00A0;&#x00A0;<span class="subsectionToc" >4.3.3 <a 
+href="#x11-650004.3.3">The Environment and the Training Epoch</a></span>
+<br />   &#x00A0;&#x00A0;<span class="subsectionToc" >4.3.4 <a 
+href="#x11-660004.3.4">Performance Measures</a></span>
+<br />   &#x00A0;<span class="sectionToc" >4.4 <a 
+href="#x11-670004.4">IMPLEMENTATION</a></span>
+<br />   &#x00A0;<span class="sectionToc" >4.5 <a 
+href="#x11-680004.5">RUNNING THE PROGRAM</a></span>
+<br />   &#x00A0;&#x00A0;<span class="subsectionToc" >4.5.1 <a 
+href="#x11-690004.5.1">Commands and Parameters</a></span>
+<br />   &#x00A0;&#x00A0;<span class="subsectionToc" >4.5.2 <a 
+href="#x11-700004.5.2">State Variables</a></span>
+<br />   &#x00A0;<span class="sectionToc" >4.6 <a 
+href="#x11-710004.6">OVERVIEW OF EXERCISES</a></span>
+<br />   &#x00A0;&#x00A0;<span class="subsectionToc" >4.6.1 <a 
+href="#x11-770004.6.1">Further Suggestions for Exercises</a></span>
+   </div>
+<!--l. 5--><p class="indent" >   In previous chapters we have seen how PDP models can be used as
+content-addressable memories and constraint-satisfaction mechanisms. PDP models
+are also of interest because of their learning capabilities. They learn, naturally and
+incrementally, in the course of processing. In this chapter, we will begin to explore
+learning in PDP models. We will consider two &#8220;classical&#8221; procedures for learning: the
+so-called Hebbian, or correlational learning rule, described by <a 
+href="handbookli2.html#XHebb49">Hebb</a>&#x00A0;(<a 
+href="handbookli2.html#XHebb49">1949</a>) and
+before him by William <a 
+href="handbookli2.html#XJames90Principles">James</a>&#x00A0;(<a 
+href="handbookli2.html#XJames90Principles">1950</a>), and the error-correcting or &#8220;delta&#8221; learning
+rule, as studied in slightly different forms by <a 
+href="handbookli2.html#XWidrowHoff60">Widrow and Hoff</a>&#x00A0;(<a 
+href="handbookli2.html#XWidrowHoff60">1960</a>) and by
+<a 
+href="handbookli2.html#XRosenblatt59">Rosenblatt</a>&#x00A0;(<a 
+href="handbookli2.html#XRosenblatt59">1959</a>).
+<!--l. 15--><p class="indent" >   We will also explore the characteristics of one of the most basic network
+architectures that has been widely used in distributed memory modeling with the
+Hebb rule and the delta rule. This is the pattern associator. The pattern associator
+has a set of input units connected to a set of output units by a single layer of
+modifiable connections that are suitable for training with the Hebb rule and
+the delta rule. Models of this type have been extensively studied by James
+Anderson (see <a 
+href="handbookli2.html#XAnderson83">Anderson</a>, 1983), <a 
+href="handbookli2.html#XKohonen77">Kohonen</a>&#x00A0;(<a 
+href="handbookli2.html#XKohonen77">1977</a>), and many others; a number of
+the papers in the <a 
+href="handbookli2.html#XHintonAnderson81">Hinton and Anderson</a>&#x00A0;(<a 
+href="handbookli2.html#XHintonAnderson81">1981</a>) volume describe models of
+this type. The models of past-tense learning and of case-role assignment in
+<span 
+class="cmti-10">PDP:18 </span>and <span 
+class="cmti-10">PDP:19 </span>are pattern associators trained with the delta rule.
+An analysis of the delta rule in pattern associator models is described in
+                                                                  
+
+                                                                  
+<span 
+class="cmti-10">PDP:11</span>.
+<!--l. 27--><p class="indent" >   As these works point out, one-layer pattern associators have several suggestive
+properties that have made them attractive as models of learning and memory. They
+can learn to act as content-addressable memories; they generalize the responses they
+make to novel inputs that are similar to the inputs that they have been trained on;
+they learn to extract the prototype of a set of repeated experiences in ways that are
+very similar to the concept learning characteristics seen in human cognitive processes;
+and they degrade gracefully with damage and noise. In this chapter our aim is to help
+you develop a basic understanding of the characteristics of these simple parallel
+networks. However, it must be noted that these kinds of networks have limitations. In
+the next chapter we will examine these limitations and consider learning
+procedures that allow the same positive characteristics of pattern associators
+to manifest themselves in networks and overcome one important class of
+limitations.
+<!--l. 41--><p class="indent" >   We begin this chapter by presenting a basic description of the learning rules and
+how they work in training connections coming into a single unit. We will then apply
+them to learning in the pattern associator.
+   <h3 class="sectionHead"><span class="titlemark">4.1   </span> <a 
+ id="x11-520004.1"></a>BACKGROUND</h3>
+<!--l. 47--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">4.1.1   </span> <a 
+ id="x11-530004.1.1"></a>The Hebb Rule</h4>
+<!--l. 49--><p class="noindent" >In Hebb&#8217;s own formulation, this learning rule was described eloquently but only in
+words. He proposed that when one neuron participates in firing another, the strength
+of the connection from the first to the second should be increased. This has often
+been simplified to &#8216;cells that fire together wire together&#8217;, and this in turn has often
+been representated mathematically as:
+   <table 
+class="equation"><tr><td><a 
+ id="x11-53001r1"></a>
+   <center class="math-display" >
+<img 
+src="handbook38x.png" alt="&#x0394;w   = &#x03F5;aa
+   ij    ij
+" class="math-display" ></center></td><td class="equation-label">(4.1)</td></tr></table>
+<!--l. 53--><p class="nopar" >
+<!--l. 55--><p class="indent" >   Here we use <span 
+class="cmmi-10">&#x03F5; </span>to refer to the value of the learning rate parameter. This version
+has been used extensively in the early work of James Anderson (e.g., <a 
+href="handbookli2.html#XAnderson77">Anderson</a>,
+                                                                  
+
+                                                                  
+1977). If we start from all-zero weights, then expose the network to a sequence of
+learning events indexed by <span 
+class="cmmi-10">l</span>, the value of any weight at the end of a series of learning
+events will be
+   <table 
+class="equation"><tr><td><a 
+ id="x11-53002r2"></a>
+   <center class="math-display" >
+<img 
+src="handbook39x.png" alt="      &#x2211;
+wij = &#x03F5;  ailajl
+       l
+" class="math-display" ></center></td><td class="equation-label">(4.2)</td></tr></table>
+<!--l. 63--><p class="nopar" >
+<!--l. 65--><p class="indent" >   In studying this rule, we will assume that activations are distributed
+around 0 and that the units in the network have activations that can be
+set in either of two ways: They may be clamped to particular values by
+external inputs or they may be determined by inputs via their connections to
+other units in the network. In the latter case, we will initially focus on the
+case where the units are completely linear; that is, on the case in which
+the activation and the output of the unit are simply set equal to the net
+input:
+   <table 
+class="equation"><tr><td><a 
+ id="x11-53003r3"></a>
+   <center class="math-display" >
+<img 
+src="handbook40x.png" alt="    &#x2211;
+ai =   ajwij
+     j
+" class="math-display" ></center></td><td class="equation-label">(4.3)</td></tr></table>
+<!--l. 75--><p class="nopar" >
+<!--l. 77--><p class="indent" >   In this formulation, with the activations distributed around 0, the <span 
+class="cmmi-10">w</span><sub><span 
+class="cmmi-7">ij</span></sub>
+assigned by Equation <a 
+href="#x11-53002r2">4.2<!--tex4ht:ref: equation2 --></a> will be proportional to the correlation between the
+activations of units <span 
+class="cmmi-10">i </span>and <span 
+class="cmmi-10">j</span>; normalizations can be used to preserve this
+correlational property when units have mean activations that vary from
+0.
+                                                                  
+
+                                                                  
+<!--l. 81--><p class="indent" >   The correlational character of the Hebbian learning rule is at once the strength of
+the procedure and its weakness. It is a strength because these correlations can
+sometimes produce useful associative learning; that is, particular units, when active,
+will tend to excite other units whose activations have been correlated with them in
+the past. It can be a weakness, though, since correlations between unit activations
+often are not sufficient to allow a network to learn even very simple associations
+between patterns of activation. <hr class="figure"><div class="figure" 
+>
+                                                                  
+
+                                                                  
+<a 
+ id="x11-530041"></a>
+                                                                  
+
+                                                                  
+<!--l. 90--><p class="noindent" ><a 
+href="ch4_fig1.png" target="_blank" > <img 
+src="ch4_fig1.png" alt="pict"  
+ width="450px"></a>
+<br /> <div class="caption" 
+><span class="id">Figure&#x00A0;4.1: </span><span  
+class="content">Two simple associative networks and the patterns used in training
+them.</span></div><!--tex4ht:label?: x11-530041 -->
+                                                                  
+
+                                                                  
+<!--l. 93--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 95--><p class="indent" >   First let&#8217;s examine a positive case: a simple network consisting of two input units
+and one output unit (Figure <a 
+href="#x11-530041">4.1<!--tex4ht:ref: figure1 --></a>A). Suppose that we arrange things so that by means
+of inputs external to this network we are able to impose patterns of activation on
+these units, and suppose that we use the Hebb rule (Equation <a 
+href="#x11-53001r1">4.1<!--tex4ht:ref: hebbrule --></a> above) to train the
+connections from the two input units to the output unit. Suppose further that we use
+the four patterns shown in Figure <a 
+href="#x11-530041">4.1<!--tex4ht:ref: figure1 --></a>B; that is, we present each pattern,
+forcing the units to the correct activation, then we adjust the strengths of
+the connections between the units. According to Equation <a 
+href="#x11-53001r1">4.1<!--tex4ht:ref: hebbrule --></a>, <span 
+class="cmmi-10">w</span><sub><span 
+class="cmr-7">20</span></sub> (the
+weight on the connection to unit 2 from unit 0) will be increased in strength
+for each pattern by amount <span 
+class="cmmi-10">&#x03F5;</span>, which in this case we will set to 1.0. On the
+other hand, <span 
+class="cmmi-10">w</span><sub><span 
+class="cmr-7">21</span></sub> will be increased by amount <span 
+class="cmmi-10">&#x03F5; </span>in two of the cases (first
+and last pattern) and reduced by <span 
+class="cmmi-10">&#x03F5; </span>in the other cases, for a net change of
+0.
+<!--l. 109--><p class="indent" >   As a result of this training, then, this simple network would have acquired a
+positive connection weight to unit 2 from unit 0. This connection will now allow unit
+0 to make unit 2 take on an activation value correlated with that of unit 0. At the
+same time, the network would have acquired a null connection from unit 1 to unit 2,
+capturing the fact that the activation of unit 1 has no predictive relation to the
+activation of unit 2. In this way, it is possible to use Hebbian learning to learn
+associations that depend on the correlation between activations of units in a
+network.
+<!--l. 118--><p class="indent" >   Unfortunately, the correlational learning that is possible with a Hebbian learning
+rule is a &#8220;unitwise&#8221; correlation, and sometimes, these unitwise correlations are not
+sufficient to learn correct associations between whole input patterns and appropriate
+responses. To see that this is so, suppose we change our network so that there are
+now four input units and one output unit, as shown in Figure <a 
+href="#x11-530041">4.1<!--tex4ht:ref: figure1 --></a>C. And suppose
+we want to train the connections in the network so that the output unit
+takes on the values given in Figure <a 
+href="#x11-530041">4.1<!--tex4ht:ref: figure1 --></a>D for each of the four input patterns
+shown there. In this case, the Hebbian learning procedure will not produce
+correct results. To see why, we need to examine the values of the weights
+(equivalently, the pairwise correlations of the activations of each sending
+unit with the receiving unit). What we see is that three of the connections
+end up with 0 weights because the activation of the corresponding input
+unit is uncorrelated with the activation of the output unit. Only one of the
+input units, unit 2, has a positive correlation with unit 4 over this set of
+patterns. This means that the output unit will make the same response
+to the first three patterns since in all three of these cases the third unit
+is on, and this is the only unit with a nonzero connection to the output
+unit.
+<!--l. 137--><p class="indent" >   Before leaving this example, we should note that there are values of the
+connection strengths that will do the job. One such set is shown in Figure <a 
+href="#x11-530041">4.1<!--tex4ht:ref: figure1 --></a>E. The
+reader can check that this set produces the correct results for each of the four input
+patterns by using Equation <a 
+href="#x11-53003r3">4.3<!--tex4ht:ref: equation3 --></a>.
+<!--l. 142--><p class="indent" >   Apparently, then, successful learning may require finding connection strengths
+that are not proportional to the correlations of activations of the units. How can this
+                                                                  
+
+                                                                  
+be done?
+   <h4 class="subsectionHead"><span class="titlemark">4.1.2   </span> <a 
+ id="x11-540004.1.2"></a>The Delta Rule</h4>
+<!--l. 147--><p class="noindent" >One answer that has occurred to many people over the years is the idea of using the
+difference between the desired, or <span 
+class="cmti-10">target</span>, activation and the obtained activation to
+drive learning. The idea is to adjust the strengths of the connections so that they will
+tend to reduce this <span 
+class="cmti-10">difference or error </span>measure. Because the rule is driven by
+differences, we have tended to call it the delta rule. Others have called it the
+Widrow-Hoff learning rule or the least mean square (LMS) rule (<a 
+href="handbookli2.html#XWidrowHoff60">Widrow
+and Hoff</a>,&#x00A0;<a 
+href="handbookli2.html#XWidrowHoff60">1960</a>); it is related to the perceptron convergence procedure of
+<a 
+href="handbookli2.html#XRosenblatt59">Rosenblatt</a>&#x00A0;(<a 
+href="handbookli2.html#XRosenblatt59">1959</a>).
+<!--l. 156--><p class="indent" >   This learning rule, in its simplest form, can be written
+   <table 
+class="equation"><tr><td><a 
+ id="x11-54001r4"></a>
+   <center class="math-display" >
+<img 
+src="handbook41x.png" alt="&#x0394;wij = &#x03F5;eiaj
+" class="math-display" ></center></td><td class="equation-label">(4.4)</td></tr></table>
+<!--l. 160--><p class="nopar" >
+<!--l. 162--><p class="indent" >   where <span 
+class="cmmi-10">e</span><sub><span 
+class="cmmi-7">i</span></sub>, the error for unit <span 
+class="cmmi-10">i</span>, is given by
+   <table 
+class="equation"><tr><td><a 
+ id="x11-54002r5"></a>
+   <center class="math-display" >
+<img 
+src="handbook42x.png" alt="e = t - a
+ i   i   i
+" class="math-display" ></center></td><td class="equation-label">(4.5)</td></tr></table>
+<!--l. 166--><p class="nopar" >
+the difference between the teaching input to unit <span 
+class="cmmi-10">i </span>and its obtained activation.
+                                                                  
+
+                                                                  
+<!--l. 169--><p class="indent" >   To see how this rule works, let&#8217;s use it to train the five-unit network in Figure
+<a 
+href="#x11-530041">4.1<!--tex4ht:ref: figure1 --></a>C on the patterns in Figure <a 
+href="#x11-530041">4.1<!--tex4ht:ref: figure1 --></a>D. The training regime is a little different here: For
+each pattern, we turn the input units on, then we see what effect they have on the
+output unit; its activation reflects the effects of the current connections in the
+network. (As before we assume the units are linear.) We compute the difference
+between the obtained output and the teaching input (Equation <a 
+href="#x11-54002r5">4.5<!--tex4ht:ref: equation5 --></a>). Then, we
+adjust the strengths of the connections according to Equation <a 
+href="#x11-54001r4">4.4<!--tex4ht:ref: equation4 --></a>. We will
+follow this procedure as we cycle through the four patterns several times, and
+look at the resulting strengths of the connections as we go. The network is
+started with initial weights of 0. The results of this process for the first
+cycle through all four patterns are shown in the first four rows of Figure <a 
+href="#x11-540032">4.2<!--tex4ht:ref: figure2 --></a>.
+<hr class="figure"><div class="figure" 
+>
+                                                                  
+
+                                                                  
+<a 
+ id="x11-540032"></a>
+                                                                  
+
+                                                                  
+<!--l. 183--><p class="noindent" ><a 
+href="ch4_fig2.png" target="_blank" > <img 
+src="ch4_fig2.png" alt="pict"  
+ width="450px"></a>
+<br /> <div class="caption" 
+><span class="id">Figure&#x00A0;4.2: </span><span  
+class="content">Learning with the delta rule. See text for explanation.</span></div><!--tex4ht:label?: x11-540032 -->
+                                                                  
+
+                                                                  
+<!--l. 186--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 188--><p class="indent" >   The first time pattern 0 is presented, the response (that is, the obtained
+activation of the output unit) is 0, so the error is +1. This means that the changes in
+the weights are proportional to the activations of the input units. A value of 0.25 was
+used for the learning rate parameter, so each &#x0394;<span 
+class="cmmi-10">w </span>is <span 
+class="cmsy-10">±</span>0<span 
+class="cmmi-10">.</span>25. These are added to the
+existing weights (which are 0), so the resulting weights are equal to these initial
+increments. When pattern 1 is presented, it happens to be uncorrelated with pattern
+0, and so again the obtained output is 0. (The output is obtained by summing up the
+pairwise products of the inputs on the current trial with the weights obtained
+at the end of the preceding trial.) Again the error is +1, and since all the
+input units are on in this case, the change in the weight is +0<span 
+class="cmmi-10">.</span>25 for each
+input. When these increments are added to the original weights, the result is
+a value of +0<span 
+class="cmmi-10">.</span>5 for <span 
+class="cmmi-10">w</span><sub><span 
+class="cmr-7">04</span></sub> and <span 
+class="cmmi-10">w</span><sub><span 
+class="cmr-7">24</span></sub>, and 0 for the other weights. When the
+next pattern is presented, these weights produce an output of +1. The error
+is therefore <span 
+class="cmsy-10">-</span>2, and so relatively larger &#x0394;<span 
+class="cmmi-10">w </span>terms result. Even so, when
+the final pattern is presented, it produces an output of +1 as well. When
+the weights are adjusted to take this into account, the weight from input
+unit 0 is negative and the weight from unit 2 is positive; the other weights
+are 0. This completes the first sweep through the set of patterns. At this
+point, the values of the weights are far from perfect; if we froze them at
+these values, the network would produce 0 output to the first three patterns.
+It would produce the correct answer (an output of <span 
+class="cmsy-10">-</span>1) only for the last
+pattern.
+<!--l. 211--><p class="indent" >   The correct set of weights is approached asymptotically if the training procedure
+is continued for several more sweeps through the set of patterns. Each of these
+sweeps, or <span 
+class="cmti-10">training epochs</span>, as we will call them henceforth, results in a set of weights
+that is closer to a perfect solution. To get a measure of the closeness of the
+approximation to a perfect solution, we can calculate an error measure for each
+pattern as that pattern is being processed. For each pattern, the error measure is the
+value of the error (<span 
+class="cmmi-10">t </span><span 
+class="cmsy-10">- </span><span 
+class="cmmi-10">a</span>) squared. This measure is then summed over all
+patterns to get a <span 
+class="cmti-10">total sum of squares </span>or <span 
+class="cmti-10">tss </span>measure. The resulting error
+measure, shown for each of the illustrated epochs in Figure <a 
+href="#x11-540032">4.2<!--tex4ht:ref: figure2 --></a>, gets smaller
+over epochs, as do the changes in the strengths of the connections. The
+weights that result at the end of 20 epochs of training are very close to the
+perfect solution values. With more training, the weights converge to these
+values.
+<!--l. 225--><p class="indent" >   The error-correcting learning rule, then, is much more powerful than the Hebb
+rule. In fact, it can be proven rather easily that the error-correcting rule will
+find a set of weights that drives the error as close to 0 as we want for each
+and every pattern in the training set, provided such a set of weights exists.
+Many proofs of this theorem have been given; a particularly clear one may
+be found in <a 
+href="handbookli2.html#XMinskyPapert69">Minsky and Papert</a>&#x00A0;(<a 
+href="handbookli2.html#XMinskyPapert69">1969</a>) (one such proof may be found in
+<span 
+class="cmti-10">PDP:11</span>).
+                                                                  
+
+                                                                  
+   <h4 class="subsectionHead"><span class="titlemark">4.1.3   </span> <a 
+ id="x11-550004.1.3"></a>Division of Labor in Error Correcting Learning</h4>
+<!--l. 235--><p class="noindent" >It is worth noting an interesting characteristic of error correcting learning rules. This
+is that, when possible, they divide up the work of driving output units to their
+correct target values. A simple case of this could arise in the simple network we have
+already been considering.
+<!--l. 240--><p class="indent" >   Suppose we create a very simple training set consisting of two input patterns and
+corresponding single desired outputs:
+                                                                  
+
+                                                                  
+   <div class="verbatim" id="verbatim-48">
+&#x00A0;input&#x00A0;&#x00A0;&#x00A0;output
+&#x00A0;<br />+&#x00A0;+&#x00A0;+&#x00A0;+&#x00A0;&#x00A0;&#x00A0;&#x00A0;+
+&#x00A0;<br />-&#x00A0;-&#x00A0;-&#x00A0;+&#x00A0;&#x00A0;&#x00A0;&#x00A0;-
+</div>
+<!--l. 246--><p class="nopar" > In this case, we see that three of the input units are perfectly correlated with the
+output and one is uncorrelated with it. If we present these two input patterns
+repeatedly with a small learning rate, the connection weights will converge
+to
+                                                                  
+
+                                                                  
+   <div class="verbatim" id="verbatim-49">
+1/3&#x00A0;1/3&#x00A0;1/3&#x00A0;0
+</div>
+<!--l. 253--><p class="nopar" > You can verify that with these connection weights, the network will produce the
+correct output for both inputs. Now, consider what would happen if the input
+patterns were:
+                                                                  
+
+                                                                  
+   <div class="verbatim" id="verbatim-50">
+&#x00A0;input&#x00A0;&#x00A0;&#x00A0;output
+&#x00A0;<br />+&#x00A0;+&#x00A0;+&#x00A0;+&#x00A0;&#x00A0;&#x00A0;&#x00A0;+
+&#x00A0;<br />-&#x00A0;+&#x00A0;+&#x00A0;+&#x00A0;&#x00A0;&#x00A0;&#x00A0;-
+</div>
+<!--l. 261--><p class="nopar" > Here, only one input unit is correlated with the output unit. What will the
+connection weights converge to in this case? The second, third, and fourth unit
+cannot help predict the output, so these weights will all be 0. The first unit will have
+to do all the work, and so the first weight will be 1. While this set of weights would
+work for the first set of input patterns, the learning rule tends to spread the
+responsibility or divide the labor among the units that best predict the output.
+This tendency to &#8217;divide the labor&#8217; among the input units is a characteristic
+of error correcting learning, and does not occur with the simple Hebbian
+learning rule because that rule is only sensitive to pairwise input-output
+correlations.
+<!--l. 274--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">4.1.4   </span> <a 
+ id="x11-560004.1.4"></a>The Linear Predictability Constraint</h4>
+<!--l. 276--><p class="noindent" >We have just noted that the delta rule will find a set of weights that solves a network
+learning problem, provided such a set of weights exists. What are the conditions
+under which such a set actually does exist?
+<!--l. 280--><p class="indent" >   Such a set of weights exists only if for each input-pattern-target-pair the target
+can be predicted from a weighted sum, or <span 
+class="cmti-10">linear combination</span>, of the activations of the
+input units. That is, the set of weights must satisfy
+   <table 
+class="equation"><tr><td><a 
+ id="x11-56001r6"></a>
+   <center class="math-display" >
+<img 
+src="handbook43x.png" alt="     &#x2211;
+tip =    wijajp
+      j
+" class="math-display" ></center></td><td class="equation-label">(4.6)</td></tr></table>
+<!--l. 286--><p class="nopar" >
+for output unit <span 
+class="cmmi-10">i </span>in all patterns <span 
+class="cmmi-10">p</span>.
+<!--l. 289--><p class="indent" >   This constraint (which we called the <span 
+class="cmti-10">linear predictability constraint </span>in <span 
+class="cmti-10">PDP:17</span>)
+can be overcome by the use of hidden units, but hidden units cannot be trained using
+the delta rule as we have described it here because (by definition) there is no
+                                                                  
+
+                                                                  
+teacher for them. Procedures for training such units are discussed in Chapter
+5.
+<!--l. 295--><p class="indent" >   Up to this point, we have considered the use of the Hebb rule and the delta
+rule for training connections coming into a single unit. We now consider
+how these learning rules produce the characteristics of <span 
+class="cmti-10">pattern associator</span>
+networks.
+<!--l. 300--><p class="noindent" >
+   <h3 class="sectionHead"><span class="titlemark">4.2   </span> <a 
+ id="x11-570004.2"></a>THE PATTERN ASSOCIATOR</h3>
+<!--l. 301--><p class="noindent" >In a pattern associator, there are two sets of units: input units and output units.
+There is also a matrix representing the connections from the input units to the
+output units. A pattern associator is really just an extension of the simple networks
+we have been considering up to now, in which the number of output units is greater
+than one and each input unit has a connection to each output unit. An
+example of an eight-unit by eight-unit pattern associator is shown in Figure
+<a 
+href="#x11-570013">4.3<!--tex4ht:ref: figure3 --></a>.
+<!--l. 309--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                  
+
+                                                                  
+<a 
+ id="x11-570013"></a>
+                                                                  
+
+                                                                  
+<!--l. 311--><p class="noindent" ><a 
+href="ch4_fig3.png" target="_blank" > <img 
+src="ch4_fig3.png" alt="pict"  
+ width="450px"></a>
+<br /> <div class="caption" 
+><span class="id">Figure&#x00A0;4.3: </span><span  
+class="content">A schematic diagram of an eight-unit pattern associator. An input
+pattern, an output pattern, and values for the weights that will allow the input
+to produce the output are shown. (From <span 
+class="cmti-10">PDP:18</span>, p. 227.)</span></div><!--tex4ht:label?: x11-570013 -->
+                                                                  
+
+                                                                  
+<!--l. 316--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 318--><p class="indent" >   The pattern associator is a device that learns associations between input
+patterns and output patterns. It is interesting because what it learns about
+one pattern tends to generalize to other similar patterns. In what follows
+we will see how this property arises, first in the simplest possible pattern
+associator: a pattern associator consisting of linear units, trained by the Hebb
+rule.<span class="footnote-mark"><a 
+href="handbook12.html#fn1x5"><sup class="textsuperscript">1</sup></a></span><a 
+ id="x11-57002f1"></a> 
+   <h4 class="subsectionHead"><span class="titlemark">4.2.1   </span> <a 
+ id="x11-580004.2.1"></a>The Hebb Rule in Pattern Associator Models</h4>
+<!--l. 331--><p class="noindent" >To begin, let us consider the effects of training a network with a single learning trial
+<span 
+class="cmmi-10">l</span>, involving an input pattern <span 
+class="cmmib-10">i</span><sub><span 
+class="cmmib-7">l</span></sub>, and an output pattern <span 
+class="cmmib-10">o</span><sub><span 
+class="cmmib-7">l</span></sub>. We will use the notational
+convention that vector names are bolded.
+<!--l. 335--><p class="indent" >   Assuming all the weights in the network are initially 0, we can express the value
+of each weight as
+   <table 
+class="equation"><tr><td><a 
+ id="x11-58001r7"></a>
+   <center class="math-display" >
+<img 
+src="handbook44x.png" alt="wij = &#x03F5;ijloil
+" class="math-display" ></center></td><td class="equation-label">(4.7)</td></tr></table>
+<!--l. 340--><p class="nopar" >
+Note that we are using the variable <span 
+class="cmmi-10">i</span><sub><span 
+class="cmmi-7">jl</span></sub> to stand for the activation of input unit <span 
+class="cmmi-10">j </span>in
+input pattern <span 
+class="cmmib-10">i</span><sub><span 
+class="cmmib-7">l</span></sub>, and we are using <span 
+class="cmmi-10">o</span><sub><span 
+class="cmmi-7">il</span></sub> to stand for the activation of output unit <span 
+class="cmmi-10">i </span>in
+output pattern <span 
+class="cmmib-10">o</span><sub><span 
+class="cmmib-7">l</span></sub>. Thus, each weight is just the product of the activation of
+the input unit times the activation of the output unit in the learning trial
+<span 
+class="cmmi-10">l</span>.
+<!--l. 347--><p class="indent" >   In this chapter, many of the formulas are also presented as MATLAB routines
+to further familiarize the reader with the MATLAB operations. In these
+routines, the subscript on the vector names will be dropped when clear.
+Thus, <span 
+class="cmmib-10">i</span><sub><span 
+class="cmmib-7">l</span></sub> will just be denoted <span 
+class="cmmi-10">i </span>in the code. Vectors are assumed to be row
+vectors.
+<!--l. 349--><p class="indent" >   In MATLAB, the above formula (Eq. <a 
+href="#x11-58001r7">4.7<!--tex4ht:ref: equation7 --></a>) is an outer product:
+                                                                  
+
+                                                                  
+   <div class="verbatim" id="verbatim-51">
+W&#x00A0;=&#x00A0;epsilon&#x00A0;*&#x00A0;(o&#8217;&#x00A0;*&#x00A0;i);
+</div>
+<!--l. 352--><p class="nopar" > where the prime is the transpose operator. Dimensions of the outer product are the
+outer dimensions of the contributing vectors: <span 
+class="cmmi-10">o</span><span 
+class="cmsy-10">&#x2032; </span>dims are [8 1], <span 
+class="cmmi-10">i </span>dims are [1 8], and so
+<span 
+class="cmmi-10">W </span>dims are [8 8]. We also adopt the convention that weight matrices are of size
+[noutputs ninputs].
+<!--l. 355--><p class="indent" >   Now let us present a test input pattern, <span 
+class="cmmib-10">i</span><sub><span 
+class="cmmib-7">t</span></sub>, and examine the resulting output
+pattern it produces. Since the units are linear, the activation of output unit <span 
+class="cmmi-10">i </span>when
+tested with input pattern <span 
+class="cmmib-10">i</span><sub><span 
+class="cmmib-7">t</span></sub> is
+   <table 
+class="equation"><tr><td><a 
+ id="x11-58002r8"></a>
+   <center class="math-display" >
+<img 
+src="handbook45x.png" alt="     &#x2211;
+oit = j wijijt
+" class="math-display" ></center></td><td class="equation-label">(4.8)</td></tr></table>
+<!--l. 361--><p class="nopar" >
+which is equivalent to
+                                                                  
+
+                                                                  
+   <div class="verbatim" id="verbatim-52">
+o&#x00A0;=&#x00A0;W&#x00A0;*&#x00A0;i&#8217;;
+</div>
+<!--l. 365--><p class="nopar" > in MATLAB, where <span 
+class="cmmi-10">o </span>is a column vector. Substituting for <span 
+class="cmmi-10">w</span><sub><span 
+class="cmmi-7">ij</span></sub> from Equation <a 
+href="#x11-58001r7">4.7<!--tex4ht:ref: equation7 --></a>
+yields
+   <table 
+class="equation"><tr><td><a 
+ id="x11-58003r9"></a>
+   <center class="math-display" >
+<img 
+src="handbook46x.png" alt="     &#x2211;
+oit =   &#x03F5;ijloilijt
+      j
+" class="math-display" ></center></td><td class="equation-label">(4.9)</td></tr></table>
+<!--l. 368--><p class="nopar" >
+Since we are summing with respect to <span 
+class="cmmi-10">j </span>in this last equation, we can pull out <span 
+class="cmmi-10">&#x03F5; </span>and
+<span 
+class="cmmi-10">o</span><sub><span 
+class="cmmi-7">il</span></sub>:
+   <table 
+class="equation"><tr><td><a 
+ id="x11-58004r10"></a>
+   <center class="math-display" >
+<img 
+src="handbook47x.png" alt="        &#x2211;
+oit = &#x03F5;oil  ijlijt
+         j
+" class="math-display" ></center></td><td class="equation-label">(4.10)</td></tr></table>
+<!--l. 373--><p class="nopar" >
+Equation <a 
+href="#x11-58004r10">4.10<!--tex4ht:ref: equation10 --></a> says that the output at the time of test will be proportional to the
+output at the time of learning times the sum of the elements of the input pattern at
+the time of learning, each multiplied by the corresponding element of the input
+pattern at the time of test.
+<!--l. 379--><p class="indent" >   This sum of products of corresponding elements is called the <span 
+class="cmti-10">dot product</span>. It is
+very important to our analysis because it expresses the <span 
+class="cmti-10">similarity </span>of the two patterns
+<span 
+class="cmmi-10">i</span><sub><span 
+class="cmmi-7">l</span></sub> and <span 
+class="cmmi-10">i</span><sub><span 
+class="cmmi-7">t</span></sub>. It is worth noting that we have already encountered an expression similar to
+this one in Equation <a 
+href="#x11-53002r2">4.2<!--tex4ht:ref: equation2 --></a>. In that case, though, the quantity was proportional to the
+                                                                  
+
+                                                                  
+correlation of the activations of two <span 
+class="cmti-10">units </span>across an ensemble of <span 
+class="cmti-10">patterns</span>. Here, it is
+proportional to the correlation of two <span 
+class="cmti-10">patterns </span>across an ensemble of <span 
+class="cmti-10">units</span>. It is often
+convenient to normalize the dot product by taking out the effects of the number of
+elements in the vectors in question by dividing the dot product by the number of
+elements. We will call this quantity the <span 
+class="cmti-10">normalized dot product</span>. For patterns
+consisting of all +1s and <span 
+class="cmsy-10">-</span>1s, it corresponds to the correlation between the two
+patterns. The normalized dot product has a value of 1 if the patterns are
+identical, a value of <span 
+class="cmsy-10">-</span>1 if they are exactly opposite to each other, and a
+value of 0 if the elements of one vector are completely uncorrelated with
+the elements of the other. To compute the normalized dot product with
+MATLAB:
+                                                                  
+
+                                                                  
+   <div class="verbatim" id="verbatim-53">
+ndp&#x00A0;=&#x00A0;sum(a.*b)/length(a);
+</div>
+<!--l. 396--><p class="nopar" > or for two row vectors
+                                                                  
+
+                                                                  
+   <div class="verbatim" id="verbatim-54">
+ndp&#x00A0;=&#x00A0;(a*b&#8217;)/length(a);
+</div>
+<!--l. 400--><p class="nopar" >
+<!--l. 402--><p class="indent" >   We can rewrite Equation <a 
+href="#x11-58004r10">4.10<!--tex4ht:ref: equation10 --></a>, then, replacing the summed quantity by the
+normalized dot product of input pattern <span 
+class="cmmib-10">i</span><sub><span 
+class="cmmib-7">l</span></sub> and input pattern <span 
+class="cmmib-10">i</span><sub><span 
+class="cmmib-7">t</span></sub>, which we denote by
+(<span 
+class="cmmib-10">i</span><sub><span 
+class="cmmib-7">l</span></sub> <span 
+class="cmsy-10">&#x22C5;</span><span 
+class="cmmib-10">i</span><sub><span 
+class="cmmib-7">t</span></sub>)<sub><span 
+class="cmmi-7">n</span></sub>:
+   <table 
+class="equation"><tr><td><a 
+ id="x11-58005r11"></a>
+   <center class="math-display" >
+<img 
+src="handbook48x.png" alt="oit = koil(il &#x22C5;it)n
+" class="math-display" ></center></td><td class="equation-label">(4.11)</td></tr></table>
+<!--l. 407--><p class="nopar" >
+where <span 
+class="cmmi-10">k </span>= <span 
+class="cmmi-10">n&#x03F5; </span>(<span 
+class="cmmi-10">n </span>is the number of units). Since Equation <a 
+href="#x11-58005r11">4.11<!--tex4ht:ref: equation11 --></a> applies to all of the
+elements of the output pattern <span 
+class="cmmi-10">o</span><sub><span 
+class="cmmi-7">t</span></sub>, we can write
+   <table 
+class="equation"><tr><td><a 
+ id="x11-58006r12"></a>
+   <center class="math-display" >
+<img 
+src="handbook49x.png" alt="ot = kol(il &#x22C5;it)n
+" class="math-display" ></center></td><td class="equation-label">(4.12)</td></tr></table>
+<!--l. 412--><p class="nopar" >
+In MATLAB, this is
+                                                                  
+
+                                                                  
+   <div class="verbatim" id="verbatim-55">
+ot&#x00A0;=&#x00A0;k&#x00A0;*&#x00A0;ol&#x00A0;*&#x00A0;sum(it&#x00A0;.*&#x00A0;il)&#x00A0;/&#x00A0;length(it);
+</div>
+<!--l. 415--><p class="nopar" >
+<!--l. 417--><p class="indent" >   This result is very basic to thinking in terms of patterns since it demonstrates that
+what is crucial for the performance of the network is the similarity relations among the
+input patterns&#8211;their correlations&#8211;rather than their specific properties considered as
+individuals.<span class="footnote-mark"><a 
+href="handbook13.html#fn2x5"><sup class="textsuperscript">2</sup></a></span><a 
+ id="x11-58007f2"></a> 
+Thus Equation <a 
+href="#x11-58006r12">4.12<!--tex4ht:ref: equation12 --></a> says that the output pattern produced by our network
+at test is a scaled version of the pattern stored on the learning trial. The
+magnitude of the pattern is proportional to the similarity of the learning and test
+patterns. In particular, if <span 
+class="cmmi-10">k </span>= 1 and if the test pattern is identical to the
+training pattern, then the output at test will be identical to the output at
+learning.
+<!--l. 429--><p class="indent" >   An interesting special case occurs when the normalized dot product between
+the learned pattern and the test pattern is 0. In this case, the output is 0:
+There is no response whatever. Patterns that have this property are called
+<span 
+class="cmti-10">orthogonal </span>or <span 
+class="cmti-10">uncorrelated</span>; note that this is not the same as being opposite or
+<span 
+class="cmti-10">anticorrelated</span>.
+<!--l. 435--><p class="indent" >   To develop intuitions about orthogonality, you should compute the normalized
+dot products of each of the patterns <span 
+class="cmmi-10">b</span>, <span 
+class="cmmi-10">c</span>, <span 
+class="cmmi-10">d</span>, and <span 
+class="cmmi-10">e </span>below with pattern <span 
+class="cmmi-10">a</span>:
+                                                                  
+
+                                                                  
+   <div class="verbatim" id="verbatim-56">
+a&#x00A0;=&#x00A0;[&#x00A0;1&#x00A0;&#x00A0;1&#x00A0;-1&#x00A0;-1]
+&#x00A0;<br />b&#x00A0;=&#x00A0;[&#x00A0;1&#x00A0;-1&#x00A0;&#x00A0;1&#x00A0;-1]
+&#x00A0;<br />c&#x00A0;=&#x00A0;[&#x00A0;1&#x00A0;-1&#x00A0;-1&#x00A0;&#x00A0;1]
+&#x00A0;<br />d&#x00A0;=&#x00A0;[&#x00A0;1&#x00A0;&#x00A0;1&#x00A0;&#x00A0;1&#x00A0;&#x00A0;1]
+&#x00A0;<br />e&#x00A0;=&#x00A0;[-1&#x00A0;-1&#x00A0;&#x00A0;1&#x00A0;&#x00A0;1]
+&#x00A0;<br />
+&#x00A0;<br />ndp_ab&#x00A0;=&#x00A0;sum(a.*b)/length(a);
+</div>
+<!--l. 447--><p class="nopar" >
+<!--l. 449--><p class="indent" >   You will see that patterns <span 
+class="cmmi-10">b</span>, <span 
+class="cmmi-10">c</span>, and <span 
+class="cmmi-10">d </span>are all orthogonal to pattern <span 
+class="cmmi-10">a</span>; in fact,
+they are all orthogonal to each other. Pattern <span 
+class="cmmi-10">e</span>, on the other hand, is not
+orthogonal to pattern <span 
+class="cmmi-10">a</span>, but is anticorrelated with it. Interestingly, it forms
+an orthogonal set with patterns <span 
+class="cmmi-10">b</span>, <span 
+class="cmmi-10">c</span>, and <span 
+class="cmmi-10">d</span>. When all the members of a
+set of patterns are orthogonal to each other, we call them an <span 
+class="cmti-10">orthogonal</span>
+<span 
+class="cmti-10">set</span>.
+<!--l. 455--><p class="indent" >   Now let us consider what happens when an entire ensemble of patterns is
+presented during learning. In the Hebbian learning situation, the set of weights
+resulting from an ensemble of patterns is just the sum of the sets of weights resulting
+from each individual pattern. Note that, in the model we are considering, the output
+pattern, when provided, is always thought of as clamping the state the output units
+to the indicated values, so that the existing values of the weights actually play no role
+in setting the activations of the output units. Given this, after learning trials on a set
+of input patterns <span 
+class="cmmib-10">i</span><sub><span 
+class="cmmib-7">l</span></sub> each paired with an output pattern <span 
+class="cmmib-10">o</span><sub><span 
+class="cmmib-7">l</span></sub>, the value of each weight
+will be
+   <table 
+class="equation"><tr><td><a 
+ id="x11-58008r13"></a>
+   <center class="math-display" >
+<img 
+src="handbook50x.png" alt="      &#x2211;
+wij = &#x03F5;  ijloil
+       l
+" class="math-display" ></center></td><td class="equation-label">(4.13)</td></tr></table>
+<!--l. 462--><p class="nopar" >
+Thus, the output produced by each test pattern is
+   <table 
+class="equation"><tr><td><a 
+ id="x11-58009r14"></a>
+                                                                  
+
+                                                                  
+   <center class="math-display" >
+<img 
+src="handbook51x.png" alt="      &#x2211;
+ot = k   ol(il &#x22C5;it)n
+       l
+" class="math-display" ></center></td><td class="equation-label">(4.14)</td></tr></table>
+<!--l. 466--><p class="nopar" >
+In words, the output of the network in response to input pattern <span 
+class="cmmi-10">t </span>is the sum of the
+output patterns that occurred during learning, with each pattern&#8217;s contribution
+weighted by the similarity of the corresponding input pattern to the test pattern.
+Three important facts follow from this:
+     <ol  class="enumerate1" >
+     <li 
+  class="enumerate" id="x11-58011x1">If a test input pattern is orthogonal to all training input patterns, the
+     output of the network will be 0; there will be no response to an input
+     pattern that is completely orthogonal to all of the input patterns that
+     occurred during learning.
+     </li>
+     <li 
+  class="enumerate" id="x11-58013x2">If a test input pattern is similar to one of the learned input patterns
+     and is uncorrelated with all the others, then the test output will be a
+     scaled version of the output pattern that was paired with the similar input
+     pattern during learning. The magnitude of the output will be proportional
+     to the similarity of the test input pattern to the learned input pattern.
+     </li>
+     <li 
+  class="enumerate" id="x11-58015x3">For other test input patterns, the output will always be a blend of the
+     training outputs, with the contribution of each output pattern weighted by
+     the similarity of the corresponding input pattern to the test input pattern.</li></ol>
+<!--l. 489--><p class="indent" >   In the exercises, we will see how these properties lead to several desirable
+features of pattern associator networks, particularly their ability to generalize
+based on similarity between test patterns and patterns presented during
+training.
+<!--l. 494--><p class="indent" >   These properties also reflect the limitations of the Hebbian learning rule; when
+the input patterns used in training the network do not form an orthogonal set, it is
+not in general possible to avoid contamination, or &#8220;cross-talk,&#8221; between the response
+that is appropriate to one pattern and the response that occurs to the others. This
+accounts for the failure of Hebbian learning with the second set of training
+patterns considered in Figure <a 
+href="#x11-530041">4.1<!--tex4ht:ref: figure1 --></a>. The reader can check that the input patterns
+we used in our first training example in Figure <a 
+href="#x11-530041">4.1<!--tex4ht:ref: figure1 --></a> (which was successful)
+were orthogonal but that the patterns used in the second example were not
+orthogonal.
+                                                                  
+
+                                                                  
+   <h4 class="subsectionHead"><span class="titlemark">4.2.2   </span> <a 
+ id="x11-590004.2.2"></a>The Delta Rule in Pattern Associator Models</h4>
+<!--l. 506--><p class="noindent" >Once again, the delta rule allows us to overcome the orthogonality limitation imposed
+by the Hebb rule. For the pattern associator case, the delta rule for a particular
+input-target pair <span 
+class="cmmib-10">i</span><sub><span 
+class="cmmib-7">l</span></sub>, <span 
+class="cmmib-10">t</span><sub><span 
+class="cmmib-7">l</span></sub> is
+   <table 
+class="equation"><tr><td><a 
+ id="x11-59001r15"></a>
+   <center class="math-display" >
+<img 
+src="handbook52x.png" alt="&#x0394;wij = &#x03F5;(til - oil)ijl.
+" class="math-display" ></center></td><td class="equation-label">(4.15)</td></tr></table>
+<!--l. 511--><p class="nopar" >
+which in MATLAB is (again, assuming row vectors)
+                                                                  
+
+                                                                  
+   <div class="verbatim" id="verbatim-57">
+delta_w&#x00A0;=&#x00A0;epsilon&#x00A0;*&#x00A0;(t-o)&#8217;&#x00A0;*&#x00A0;i;
+</div>
+<!--l. 515--><p class="nopar" > Therefore the weights that result from an ensemble of learning pairs indexed by <span 
+class="cmmi-10">l</span>
+can be written:
+   <table 
+class="equation"><tr><td><a 
+ id="x11-59002r16"></a>
+   <center class="math-display" >
+<img 
+src="handbook53x.png" alt="w   = &#x03F5;&#x2211; (t - o )i
+  ij     l  il   il jl
+" class="math-display" ></center></td><td class="equation-label">(4.16)</td></tr></table>
+<!--l. 520--><p class="nopar" >
+<!--l. 522--><p class="indent" >   It is interesting to compare this to the Hebb rule. Consider first the case where
+each of the learned patterns is orthogonal to every other one and is presented exactly
+once during learning. Then <span 
+class="cmmib-10">o</span><sub><span 
+class="cmmib-7">l</span></sub> will be <span 
+class="cmbx-10">0</span> (a vector of all zeros) for all learned patterns
+<span 
+class="cmmi-10">l</span>, and the above formula reduces to
+   <table 
+class="equation"><tr><td><a 
+ id="x11-59003r17"></a>
+   <center class="math-display" >
+<img 
+src="handbook54x.png" alt="wij = &#x03F5;&#x2211; tilijl
+        l
+" class="math-display" ></center></td><td class="equation-label">(4.17)</td></tr></table>
+<!--l. 529--><p class="nopar" >
+In this case, the delta rule produces the same results as the Hebb rule; the teaching
+input simply replaces the output pattern from Equation <a 
+href="#x11-58008r13">4.13<!--tex4ht:ref: equation13 --></a>. As long as the patterns
+remain orthogonal to each other, there will be no cross-talk between patterns.
+Learning will proceed independently for each pattern. There is one difference,
+however. If we continue learning beyond a single epoch, the delta rule will
+stop learning when the weights are such that they allow the network to
+                                                                  
+
+                                                                  
+produce the target patterns exactly. In the Hebb rule, the weights will grow
+linearly with each presentation of the set of patterns, getting stronger without
+bound.
+<!--l. 540--><p class="indent" >   In the case where the input patterns <span 
+class="cmmib-10">i</span><sub><span 
+class="cmmib-7">l</span></sub>, are not orthogonal, the results of the two
+learning procedures are more distinct. In this case, though, we can observe the
+following interesting fact: We can read Equation <a 
+href="#x11-59001r15">4.15<!--tex4ht:ref: equation15 --></a> as indicating that the change
+in the weights that occurs on a learning trial is storing an association of
+the input pattern with the <span 
+class="cmti-10">error </span>pattern; that is, we are adding to each
+weight an increment that can be thought of as an association between the
+<span 
+class="cmti-10">error </span>for the output unit and the activation of the input unit. To see the
+implications of this, let&#8217;s examine the effects of a learning trial with input
+pattern <span 
+class="cmmib-10">i</span><sub><span 
+class="cmmib-7">l</span></sub> paired with output pattern <span 
+class="cmmib-10">t</span><sub><span 
+class="cmmib-7">l</span></sub> on the output produced by test
+pattern <span 
+class="cmmib-10">i</span><sub><span 
+class="cmmib-7">t</span></sub>. The effect of the change in the weights due to this learning trial (as
+given by Equation <a 
+href="#x11-59001r15">4.15<!--tex4ht:ref: equation15 --></a>) will be to change the output of some output unit <span 
+class="cmmi-10">i</span>
+by an amount proportional to the error that occurred for that unit on the
+learning trial, <span 
+class="cmmi-10">e</span><sub><span 
+class="cmmi-7">i</span></sub>, times the dot product of the learned pattern with the test
+pattern:
+   <center class="math-display" >
+<img 
+src="handbook55x.png" alt="&#x0394;oit = keil(il &#x22C5;it)n
+" class="math-display" ></center>
+<!--l. 556--><p class="nopar" >
+Here <span 
+class="cmmi-10">k </span>is again equal to <span 
+class="cmmi-10">&#x03F5; </span>times the number of input units <span 
+class="cmmi-10">n</span>. In vector notation, the
+change in the output pattern <span 
+class="cmmib-10">o</span><sub><span 
+class="cmmib-7">t</span></sub> can be expressed as
+   <center class="math-display" >
+<img 
+src="handbook56x.png" alt="&#x0394;ot = kel(il &#x22C5;it)n
+" class="math-display" ></center>
+<!--l. 561--><p class="nopar" >
+Thus, the change in the output pattern at test is proportional to the error vector
+times the normalized dot product of the input pattern that occurred during
+learning and the input pattern that occurred during test. Two facts follow from
+this:
+     <ol  class="enumerate1" >
+     <li 
+  class="enumerate" id="x11-59005x1">If the input on the learning trial is identical to the input on the test trial
+     so that the normalized dot product is 1.0 and if k = 1.0, then the change
+     in the output pattern will be exactly equal to the error pattern. Since
+     the error pattern is equal to the difference between the target and the
+     obtained output on the learning trial, this amounts to one trial learning
+     of the desired association between the input pattern on the training trial
+     and the target on this trial.
+     </li>
+     <li 
+  class="enumerate" id="x11-59007x2">However, if <span 
+class="cmmib-10">i</span><sub><span 
+class="cmmib-7">t</span></sub> is different from <span 
+class="cmmib-10">i</span><sub><span 
+class="cmmib-7">l</span></sub> but not completely different so that
+                                                                  
+
+                                                                  
+     (<span 
+class="cmmib-10">i</span><sub><span 
+class="cmmib-7">l</span></sub> <span 
+class="cmsy-10">&#x22C5;</span> <span 
+class="cmmib-10">i</span><sub><span 
+class="cmmib-7">t</span></sub>)<sub><span 
+class="cmmi-7">n</span></sub> n is not equal to either 1 or 0, then the output produced by <span 
+class="cmmib-10">i</span><sub><span 
+class="cmmib-7">t</span></sub>
+     will be affected by the learning trial. The magnitude of the effect will be
+     proportional to the magnitude of (<span 
+class="cmmib-10">i</span><sub><span 
+class="cmmib-7">l</span></sub> <span 
+class="cmsy-10">&#x22C5;</span><span 
+class="cmmib-10">i</span><sub><span 
+class="cmmib-7">t</span></sub>)<sub><span 
+class="cmmi-7">n</span></sub>.</li></ol>
+<!--l. 580--><p class="indent" >   The second effect&#8211;the transfer from learning one pattern to performance on
+another&#8211;may be either beneficial or interfering. Importantly, for patterns of all +1s
+and <span 
+class="cmsy-10">-</span>1s, the transfer is always less than the effect on the pattern used on
+the learning trial itself, since the normalized dot product of two different
+patterns must be less than the normalized dot product of a pattern with itself.
+This fact plays a role in several proofs concerning the convergence of the
+delta rule learning procedure (see <a 
+href="handbookli2.html#XKohonen77">Kohonen</a>, 1977, and <span 
+class="cmti-10">PDP:11 </span>for further
+discussion).
+<!--l. 589--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">4.2.3   </span> <a 
+ id="x11-600004.2.3"></a>Linear Predictability and the Linear Independence Requirement</h4>
+<!--l. 590--><p class="noindent" >Earlier we considered the linear predictability constraint for training a single output
+unit. Since the pattern associator can be viewed as a collection of several different
+output units, the constraint applies to each unit in the pattern associator.
+Thus, to master a set of patterns there must exist a set of weights <span 
+class="cmmi-10">w</span><sub><span 
+class="cmmi-7">ij</span></sub> such
+that
+   <table 
+class="equation"><tr><td><a 
+ id="x11-60001r18"></a>
+   <center class="math-display" >
+<img 
+src="handbook57x.png" alt="     &#x2211;
+tip =   wijijp
+      j
+" class="math-display" ></center></td><td class="equation-label">(4.18)</td></tr></table>
+<!--l. 597--><p class="nopar" >
+for all output units <span 
+class="cmmi-10">i </span>for all target-input pattern pairs <span 
+class="cmmi-10">p</span>. A consequence of
+this constraint for the sets of input-output patterns that can be learned
+by a pattern associator is something we will call the <span 
+class="cmti-10">linear independence</span>
+<span 
+class="cmti-10">requirement</span>:
+     <div class="quote">
+     <!--l. 603--><p class="noindent" >An <span 
+class="cmti-10">arbitrary  </span>output pattern <span 
+class="cmmib-10">o</span><sub><span 
+class="cmmib-7">p</span></sub> can be correctly associated with
+     a particular input pattern <span 
+class="cmmib-10">i</span><sub><span 
+class="cmmib-7">p</span></sub> without ruining associations between
+     other input-output pairs, only if <span 
+class="cmmib-10">i</span><sub><span 
+class="cmmib-7">p</span></sub> is linearly independent of all of
+     the other patterns in the training set, that is, as long as <span 
+class="cmmib-10">i</span><sub><span 
+class="cmmib-7">p</span></sub> <span 
+class="cmti-10">cannot</span>
+                                                                  
+
+                                                                  
+     be written as a linear combination of the other input patterns.</div>
+<!--l. 610--><p class="noindent" >If pattern <span 
+class="cmmib-10">i</span><sub><span 
+class="cmmib-7">p</span></sub> <span 
+class="cmti-10">can </span>be written as a linear combination of the other input patterns, then the
+output for <span 
+class="cmmib-10">i</span><sub><span 
+class="cmmib-7">p</span></sub> will be a linear combination of the outputs produced by the other
+patterns (each other pattern&#8217;s contribution to the linear combination will be weighted
+by it&#8217;s similarity to <span 
+class="cmmib-10">i</span><sub><span 
+class="cmmib-7">p</span></sub>). If this linear combination just happens to be the correct
+output for <span 
+class="cmmib-10">i</span><sub><span 
+class="cmmib-7">p</span></sub>, then all is well, but if it is not, the weights will be changed by the delta
+rule, and this will distort the output pattern produced by one or more of the other
+patterns in the set.
+<!--l. 619--><p class="indent" >   A pattern that cannot be written as a linear combination of a set of other
+patterns is said to be <span 
+class="cmti-10">linearly independent </span>from these other patterns. When all the
+members of a set of patterns are linearly independent, we say they form a <span 
+class="cmti-10">linearly</span>
+<span 
+class="cmti-10">independent </span>set. To ensure that arbitrary associations to each of a set of input
+patterns can be learned, the input patterns must form a linearly independent
+set.
+<!--l. 626--><p class="indent" >   Although this is a serious limitation on what a network can learn, it is
+worth noting that there are cases in which the response that we need to
+make to one input pattern can be predictable from the responses that we
+make to other patterns with which they overlap. In these cases, the fact that
+the pattern associator produces a response that is a combination of the
+responses to other patterns can allow it to produce very efficient, often rule-like
+solutions to the problem of mapping each of a set of input patterns to the
+appropriate response. We will examine this property of pattern associators in the
+exercises.
+<!--l. 636--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">4.2.4   </span> <a 
+ id="x11-610004.2.4"></a>Nonlinear Pattern Associators</h4>
+<!--l. 637--><p class="noindent" >Not all pattern associator models that have been studied in the literature make use of
+the linear activation assumptions we have been using in this analysis. Several
+different kinds of nonlinear pattern associators (i.e., associators in which the output
+units have nonlinear activation functions) fall within the general class of pattern
+associator models. These nonlinearities have effects on performance, but the basic
+principles that we have observed here are preserved even when these nonlinearities
+are in place. In particular:
+     <ol  class="enumerate1" >
+     <li 
+  class="enumerate" id="x11-61002x1">Orthogonal inputs are mutually transparent.
+     </li>
+     <li 
+  class="enumerate" id="x11-61004x2">The learning process converges with the delta rule as long as there is a set
+     of weights that will solve the learning problem.
+     </li>
+     <li 
+  class="enumerate" id="x11-61006x3">A set of weights that will solve the problem does not always exist.
+     </li>
+     <li 
+  class="enumerate" id="x11-61008x4">What is learned about one pattern tends to transfer to others.</li></ol>
+                                                                  
+
+                                                                  
+<!--l. 652--><p class="noindent" >
+   <h3 class="sectionHead"><span class="titlemark">4.3   </span> <a 
+ id="x11-620004.3"></a>THE FAMILY OF PATTERN ASSOCIATOR MODELS</h3>
+<!--l. 653--><p class="noindent" >With the above as background, we turn to a brief specification of several members of
+the class of pattern associator models that are available through the <span 
+class="cmbx-10">pa </span>program.
+These are all variants on the pattern associator theme. Each model consists of a set
+of input units and a set of output units. The activations of the input units are
+clamped by externally supplied input patterns. The activations of the output units
+are determined in a single two-phase processing cycle. First, the net input to each
+output unit is computed. This is the sum of the activations of the input units times
+the corresponding weights, plus an optional bias term associated with the output
+unit:
+   <table 
+class="equation"><tr><td><a 
+ id="x11-62001r19"></a>
+   <center class="math-display" >
+<img 
+src="handbook58x.png" alt="neti = &#x2211;  wijaj + biasi
+       j
+" class="math-display" ></center></td><td class="equation-label">(4.19)</td></tr></table>
+<!--l. 664--><p class="nopar" >
+<!--l. 666--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">4.3.1   </span> <a 
+ id="x11-630004.3.1"></a>Activation Functions</h4>
+<!--l. 668--><p class="noindent" >After computing the net input to each output unit, the activation of the output unit
+is then determined according to an activation function. Several variants are
+available:
+     <ul class="itemize1">
+     <li class="itemize"><span 
+class="cmti-10">Linear</span>. Here the activation of output unit <span 
+class="cmmi-10">i </span>is simply equal to the net
+     input.
+     </li>
+     <li class="itemize"><span 
+class="cmti-10">Linear threshold</span>.  In  this  variant,  each  of  the  output  units  is  a  <span 
+class="cmti-10">linear</span>
+     <span 
+class="cmti-10">threshold unit</span>; that is, its activation is set to 1 if its net input exceeds 0
+     and is set to 0 otherwise. Units of this kind were used by Rosenblatt in
+     his work on the perceptron <a 
+href="handbookli2.html#XRosenblatt59">1959</a>.
+                                                                  
+
+                                                                  
+     </li>
+     <li class="itemize"><span 
+class="cmti-10">Stochastic</span>. This is the activation function used in <span 
+class="cmti-10">PDP:18 </span>and <span 
+class="cmti-10">PDP:19</span>.
+     Here, the output is set to 1, with a probability <span 
+class="cmmi-10">p </span>given by the logistic
+     function:
+     <table 
+class="equation"><tr><td><a 
+ id="x11-63001r20"></a>
+     <center class="math-display" >
+     <img 
+src="handbook59x.png" alt="p(o = 1) =-----1-----
+   i      1 + e- neti&#x2215;T
+     " class="math-display" ></center></td><td class="equation-label">(4.20)</td></tr></table>
+     <!--l. 683--><p class="nopar" >
+     This is the same activation function used in Boltzmann machines.
+     </li>
+     <li class="itemize"><span 
+class="cmti-10">Continuous sigmoid</span>. In this variant, each of the output units takes on an
+     activation that is nonlinearly related to its input according to the logistic
+     function:
+     <table 
+class="equation"><tr><td><a 
+ id="x11-63002r21"></a>
+     <center class="math-display" >
+     <img 
+src="handbook60x.png" alt="o = -----1-----
+ i  1 + e-neti&#x2215;T
+     " class="math-display" ></center></td><td class="equation-label">(4.21)</td></tr></table>
+     <!--l. 690--><p class="nopar" >
+     Note that this is a continuous function that transforms net inputs between +<span 
+class="cmsy-10">&#x221E;</span>
+     and <span 
+class="cmsy-10">-&#x221E; </span>into real numbers between 0 and 1. This is the activation
+     function used in the back propagation networks we will study in Chapter
+     5.</li></ul>
+                                                                  
+
+                                                                  
+<!--l. 697--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">4.3.2   </span> <a 
+ id="x11-640004.3.2"></a>Learning Assumptions</h4>
+<!--l. 698--><p class="noindent" >Two different learning rules are available in the <span 
+class="cmbx-10">pa </span>program:
+     <ul class="itemize1">
+     <li class="itemize"><span 
+class="cmti-10">The Hebb rule</span>. Hebbian learning in the pattern associator model works as
+     follows. Activations of input units are clamped based on an externally supplied
+     input pattern, and activations of the output units are clamped to the values
+     given by some externally supplied target pattern. Learning then occurs by
+     adjusting the strengths of the connections according to the Hebbian
+     rule:
+     <table 
+class="equation"><tr><td><a 
+ id="x11-64001r22"></a>
+     <center class="math-display" >
+     <img 
+src="handbook61x.png" alt="&#x0394;wij = &#x03F5;oiij
+     " class="math-display" ></center></td><td class="equation-label">(4.22)</td></tr></table>
+     <!--l. 708--><p class="nopar" >
+     </li>
+     <li class="itemize"><span 
+class="cmti-10">The delta rule</span>. Error-correcting learning in the pattern associator model works
+     as follows. Activations of input units are clamped to values determined by an
+     externally supplied input pattern, and activations of the output units are
+     calculated as described earlier. The difference between the obtained activation
+     of the output units and the target activation, as specified in an externally
+     supplied target pattern, is then used in changing the weights according to the
+     following formula:
+     <table 
+class="equation"><tr><td><a 
+ id="x11-64002r23"></a>
+     <center class="math-display" >
+     <img 
+src="handbook62x.png" alt="&#x0394;wij = &#x03F5;(ti - oi)ij
+     " class="math-display" ></center></td><td class="equation-label">(4.23)</td></tr></table>
+     <!--l. 719--><p class="nopar" >
+     </li></ul>
+<!--l. 722--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">4.3.3   </span> <a 
+ id="x11-650004.3.3"></a>The Environment and the Training Epoch</h4>
+<!--l. 723--><p class="noindent" >In the pattern associator models, there is a notion of an <span 
+class="cmti-10">environment </span>of pattern
+pairs. Each pair consists of an input pattern and a corresponding output pattern. A
+training <span 
+class="cmti-10">epoch </span>consists of one learning trial on each pattern pair in the environment.
+On each trial, the input is presented, the corresponding output is computed, and the
+weights are updated. Patterns may be presented in fixed sequential order or in
+permuted order within each epoch.
+<!--l. 731--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">4.3.4   </span> <a 
+ id="x11-660004.3.4"></a>Performance Measures</h4>
+<!--l. 732--><p class="noindent" >After processing each pattern, several measures of the output that is produced and
+its relation to the target are computed. One of these is the normalized dot product of
+the output pattern with the target. This measure is called the <span 
+class="cmti-10">ndp</span>. We have
+already described this measure quantitatively; here we note that it gives
+a kind of combined indication of the similarity of two patterns and their
+magnitudes. In the cases where this measure is most useful-where the target
+is a pattern of +1s and <span 
+class="cmsy-10">-</span>1s&#8211;the magnitude of the target is fixed and the
+normalized dot product varies with the similarity of the output to the target
+and the magnitude of the output itself. To unconfound these factors, we
+provide two further measures: the normalized vector length, or <span 
+class="cmti-10">nvl</span>, of the
+output vector and the vector correlation, or <span 
+class="cmti-10">vcor</span>, of the output vector with
+the target vector. The <span 
+class="cmti-10">nvl </span>measures the magnitude of the output vector,
+normalizing for the number of elements in the vector. It has a value of 1.0 for
+vectors consisting of all +1s and <span 
+class="cmsy-10">-</span>1s. The <span 
+class="cmti-10">vcor </span>measures the similarity of the
+vectors independent of their length; it has a value of 1.0 for vectors that are
+perfectly correlated, 0.0 for orthogonal vectors, and <span 
+class="cmsy-10">-</span>1<span 
+class="cmmi-10">.</span>0 for anticorrelated
+vectors.
+<!--l. 750--><p class="indent" >   Quantitative definitions of vector length and vector correlation are given in
+<span 
+class="cmti-10">PDP:9 </span>(pp. 376-379). The vector length of vector <span 
+class="cmmib-10">v</span>, <span 
+class="cmsy-10">||</span><span 
+class="cmmib-10">v</span><span 
+class="cmsy-10">||</span>, is the square root of the
+dot product of a vector with itself:
+   <center class="math-display" >
+<img 
+src="handbook63x.png" alt="||v|| = &#x221A;v-&#x22C5;v
+" class="math-display" ></center>
+                                                                  
+
+                                                                  
+<!--l. 754--><p class="nopar" >
+and the vector correlation (also called the cosine of the angle between two
+vectors) is the dot product of the two vectors divided by the product of their
+lengths:
+   <center class="math-display" >
+<img 
+src="handbook64x.png" alt="           -(u-&#x22C5;v)-
+vcor(u,v) = ||u|| ||v||
+" class="math-display" ></center>
+<!--l. 758--><p class="nopar" >
+The normalized vector length is obtained by dividing the length by the square root of
+number of elements. Given these definitions, we can now consider the relationships
+between the various measures. When the target pattern consists of +1s and <span 
+class="cmsy-10">-</span>1s, the
+normalized dot product of the output pattern and the target pattern is equal to the
+normalized vector length of the output pattern times the vector correlation of the
+output pattern and the target:
+   <table 
+class="equation"><tr><td><a 
+ id="x11-66001r24"></a>
+   <center class="math-display" >
+<img 
+src="handbook65x.png" alt="ndp = nvl &#x22C5;vcor.
+" class="math-display" ></center></td><td class="equation-label">(4.24)</td></tr></table>
+<!--l. 765--><p class="nopar" >
+<!--l. 767--><p class="indent" >   In addition to these measures, we also compute the <span 
+class="cmti-10">pattern sum of squares </span>or <span 
+class="cmti-10">pss</span>
+and the <span 
+class="cmti-10">total sum of squares </span>or <span 
+class="cmti-10">tss</span>. The <span 
+class="cmti-10">pss </span>is the sum over all output units of the
+squared error, where the error for each output unit is the difference between the
+target and the obtained activation of the unit. This quantity is computed for each
+pattern processed. The <span 
+class="cmti-10">tss </span>is just the sum over the <span 
+class="cmti-10">pss </span>values computed for each
+pattern in the training set. These measures are not very meaningful when learning
+occurs by the Hebb rule, but they are meaningful when learning occurs by the delta
+rule.
+<!--l. 776--><p class="noindent" >
+   <h3 class="sectionHead"><span class="titlemark">4.4   </span> <a 
+ id="x11-670004.4"></a>IMPLEMENTATION</h3>
+                                                                  
+
+                                                                  
+<!--l. 777--><p class="noindent" >The <span 
+class="cmbx-10">pa </span>program implements the pattern associator models in a very straightforward
+way. The program is initialized by defining a network, as in previous chapters. A PA
+network consists of a pool of input units (<span 
+class="cmti-10">pool(2)</span>) and a pool of output units
+(<span 
+class="cmti-10">pool(3)</span>). <span 
+class="cmti-10">pool(1) </span>contains the bias unit which is always on but is not used in these
+exercises. Connections are allowed from input units to output units only. The
+network specification file (<span 
+class="cmti-10">pa.net</span>) defines the number of input units and output units,
+as well as the total number of units, and indicates which connections exist. It is also
+generally necessary to read in a file specifying the set of pattern pairs that make up
+the environment of the model.
+<!--l. 786--><p class="indent" >   Once the program is initialized, learning occurs through calls to a routine called
+<span 
+class="cmti-10">train</span>. This routine carries out nepochs of training, where the training mode can be
+selected in the Train options window. <span 
+class="cmti-10">strain </span>trains the network with patterns in
+sequential order, while <span 
+class="cmti-10">ptrain </span>permutes the order. The number of epochs can also be
+set in that window. The routine exits if the total sum of squares measure, <span 
+class="cmti-10">tss</span>, is less
+than some criterion value, <span 
+class="cmti-10">ecrit </span>which can also be set in Train options. Here is the
+<span 
+class="cmti-10">train </span>routine:
+                                                                  
+
+                                                                  
+   <div class="verbatim" id="verbatim-58">
+function&#x00A0;train()
+&#x00A0;<br />for&#x00A0;iter&#x00A0;=&#x00A0;1:nepochs
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;patn&#x00A0;=&#x00A0;getpatternrange(data,options);
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;for&#x00A0;p&#x00A0;=&#x00A0;1:npatterns
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;pno&#x00A0;=&#x00A0;patn(p);
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;setinput(data,pno,options);
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;compute_output(data,pno,options);
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;compute_error;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;sumstats;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;if&#x00A0;(options.lflag)
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;change_weights(options);
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;end
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;if&#x00A0;(net.tss&#x00A0;&#x003C;&#x00A0;options.ecrit)
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;return;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;end
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;end
+&#x00A0;<br />end
+</div>
+<!--l. 808--><p class="nopar" >
+<!--l. 810--><p class="indent" >   This calls four other routines: one that sets the input pattern (<span 
+class="cmti-10">setinput</span>), one
+that computes the activations of the output units from the activations of
+the input units (<span 
+class="cmti-10">compute</span><span 
+class="cmti-10">_output</span>), one that computes the error measure
+(<span 
+class="cmti-10">compute</span><span 
+class="cmti-10">_error</span>), and one that computes the various summary statistics
+(<span 
+class="cmti-10">sumstats</span>).
+<!--l. 815--><p class="indent" >   Below we show the <span 
+class="cmti-10">compute</span><span 
+class="cmti-10">_output </span>and the <span 
+class="cmti-10">compute</span><span 
+class="cmti-10">_error </span>routines. First,
+<span 
+class="cmti-10">compute</span><span 
+class="cmti-10">_output</span>:
+                                                                  
+
+                                                                  
+   <div class="verbatim" id="verbatim-59">
+function&#x00A0;compute_output(pattern,patnum,opts)
+&#x00A0;<br />
+&#x00A0;<br />p=net.pool(3);&#x00A0;%reference&#x00A0;to&#x00A0;the&#x00A0;output&#x00A0;pool
+&#x00A0;<br />p.netinput&#x00A0;=&#x00A0;net.pool(2).output&#x00A0;*&#x00A0;p.proj.weight&#8217;;
+&#x00A0;<br />switch&#x00A0;opts.actfunction
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;case&#x00A0;&#8216;st&#8217;&#x00A0;&#x00A0;%stochastic
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;logout&#x00A0;=&#x00A0;logistic(p.netinput,&#x00A0;opts.temperature);
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;r&#x00A0;=&#x00A0;rand(1,n);
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;p.output(r&#x00A0;&#x003C;&#x00A0;logout)&#x00A0;=&#x00A0;1.0;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;p.output(r&#x00A0;&#x003E;=&#x00A0;logout)&#x00A0;=&#x00A0;0.0;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;case&#x00A0;&#8216;li&#8217;&#x00A0;&#x00A0;&#x00A0;%linear
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;p.output&#x00A0;=&#x00A0;p.netinput;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;case&#x00A0;&#8216;cs&#8217;&#x00A0;&#x00A0;&#x00A0;%continuous&#x00A0;sigmoid
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;p.output&#x00A0;=&#x00A0;logistic(p.netinput,opts.temperature);
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;case&#x00A0;&#8216;lt&#8217;&#x00A0;&#x00A0;&#x00A0;%linear&#x00A0;threshold
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;p.output(p.netinput&#x00A0;&#x003E;&#x00A0;0)&#x00A0;=&#x00A0;1.0;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;p.output(p.netinput&#x00A0;&#x003C;=&#x00A0;0)&#x00A0;=&#x00A0;0.0;
+&#x00A0;<br />end
+</div>
+<!--l. 836--><p class="nopar" >
+<!--l. 838--><p class="indent" >   The activation function can be selected from the menu in Train options. There are
+represented in the code as Linear (<span 
+class="cmti-10">li</span>), Linear threshold (<span 
+class="cmti-10">lt</span>), Stochastic (<span 
+class="cmti-10">st</span>), and
+Continuous Sigmoid (<span 
+class="cmti-10">cs</span>). With the linear activation function, the output activation
+is just the net input. For linear threshold, activation is 1 if the net input
+is greater than 0, and 0 otherwise. The continuous sigmoid function calls
+the logistic function shown in Chapter 3. This function returns a number
+between 0 and 1. For stochastic activation, the logistic activation is first
+calculated and the result is then used to set the activation of the unit to 0 or
+1 using the logistic activation as the probability. The activation function
+can be specified separately for training and testing via the Train and Test
+options.
+<!--l. 841--><p class="indent" >   The <span 
+class="cmti-10">compute</span><span 
+class="cmti-10">_error </span>function is exceptionally simple for the pa program:
+                                                                  
+
+                                                                  
+   <div class="verbatim" id="verbatim-60">
+function&#x00A0;compute_error()
+&#x00A0;<br />net.pool(3).error&#x00A0;=&#x00A0;net.pool(3).target&#x00A0;-&#x00A0;net.pool(3).output;
+</div>
+<!--l. 845--><p class="nopar" >
+<!--l. 847--><p class="indent" >   Note that when the targets and the activations of the output units are both
+specified in terms of 0s and 1s, the error will be 0, 1, or -1.
+<!--l. 849--><p class="indent" >   If learning is enabled (as it is by default in the program, as indicated by the value
+of the <span 
+class="cmti-10">lflag </span>variable which corresponds to the learn checkbox under Train options),
+the <span 
+class="cmti-10">train </span>routine calls the <span 
+class="cmti-10">change</span><span 
+class="cmti-10">_weights </span>routine, which actually carries out the
+learning:
+                                                                  
+
+                                                                  
+   <div class="verbatim" id="verbatim-61">
+function&#x00A0;change_weights(opts)
+&#x00A0;<br />p&#x00A0;=&#x00A0;net.pool(3);&#x00A0;%output&#x00A0;pool
+&#x00A0;<br />if&#x00A0;(hebb)
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;p.output&#x00A0;=&#x00A0;p.target;
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;scalewith&#x00A0;=&#x00A0;p.output;
+&#x00A0;<br />else&#x00A0;%delta&#x00A0;rule&#x00A0;instead
+&#x00A0;<br />&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;scalewith&#x00A0;=&#x00A0;p.error;
+&#x00A0;<br />end
+&#x00A0;<br />p.proj.weight&#x00A0;=&#x00A0;p.proj.weight&#x00A0;+&#x00A0;(scalewith&#8217;&#x00A0;*&#x00A0;net.pool(2).output&#x00A0;*&#x00A0;lr);
+&#x00A0;<br />net.pool(3)&#x00A0;=&#x00A0;p;
+</div>
+<!--l. 861--><p class="nopar" >
+<!--l. 863--><p class="indent" >   <span 
+class="cmti-10">Hebb </span>and <span 
+class="cmti-10">Delta </span>are the two possible values of the <span 
+class="cmti-10">lrule </span>field under Train options.
+The <span 
+class="cmti-10">lr </span>variable in the code corresponds to the learning rate, which is set by the <span 
+class="cmti-10">lrate</span>
+field in Train options.
+<!--l. 865--><p class="indent" >   Note that for Hebbian learning, we use the target pattern directly in
+the learning rule, since this is mathematically equivalent to clamping the
+activations of the output units to equal the target pattern and then using these
+activations.
+<!--l. 870--><p class="noindent" >
+   <h3 class="sectionHead"><span class="titlemark">4.5   </span> <a 
+ id="x11-680004.5"></a>RUNNING THE PROGRAM</h3>
+<!--l. 871--><p class="noindent" >The <span 
+class="cmbx-10">pa </span>program is used much like the other programs we have described in earlier
+chapters. The main things that are new for this program are the <span 
+class="cmti-10">strain </span>and <span 
+class="cmti-10">ptrain</span>
+options for training pattern associator networks.
+<!--l. 875--><p class="indent" >   Training or Testing are selected with the radio button just next to the &#8220;options&#8221;
+button. The &#8220;Test all&#8221; radio button in the upper right corner of the test panel
+allows you to test the network&#8217;s response to all of the patterns in the list of
+pattern pairs with learning turned off so as not to change the weights while
+testing.
+<!--l. 879--><p class="indent" >   As in the <span 
+class="cmbx-10">cs </span>program, the <span 
+class="cmti-10">newstart </span>and <span 
+class="cmti-10">reset </span>buttons are both available as
+alternative methods for reinitializing the programs. Recall that <span 
+class="cmti-10">reset </span>reinitializes the
+random number generator with the same seed used the last time the program was
+initialized, whereas <span 
+class="cmti-10">newstart </span>seeds the random number generator with a new random
+seed. Although there can be some randomness in <span 
+class="cmti-10">pa</span>, the problem of local
+minima does not arise and different random sequences will generally produce
+qualitatively similar results, so there is little reason to use <span 
+class="cmti-10">reset </span>as opposed to
+<span 
+class="cmti-10">newstart</span>.
+<!--l. 888--><p class="indent" >   As mentioned in &#8220;Implementation&#8221; (Section <a 
+href="#x11-670004.4">4.4<!--tex4ht:ref: Imp --></a>), there are several activation
+functions, and linear is default. Also, <span 
+class="cmti-10">Hebb </span>and <span 
+class="cmti-10">Delta </span>are alternative rules under <span 
+class="cmti-10">lrule</span>
+in Train options. <span 
+class="cmti-10">nepochs </span>in Train options is the number of training epochs run when
+                                                                  
+
+                                                                  
+the &#8220;Run&#8221; button is pushed in the train panel on the main window. <span 
+class="cmti-10">ecrit </span>is the stop
+criterion value for the error measure. The step-size for the screen updates during
+training can be set to <span 
+class="cmti-10">pattern</span>, <span 
+class="cmti-10">cycle </span>or <span 
+class="cmti-10">epoch </span>(default) in the train panel on the main
+window. When <span 
+class="cmti-10">pattern </span>is selected and the network is run, the window is updated for
+every pattern trial of every epoch. If the value is <span 
+class="cmti-10">cycle</span>, the screen is updated after
+processing each pattern and then updated again after the weights are changed
+for each pattern. Likewise, <span 
+class="cmti-10">epoch </span>updates the window just once per epoch
+after all pattern presentations, which is the fastest but shows the fewest
+updates.
+<!--l. 890--><p class="indent" >   There are other important options under the Train options. <span 
+class="cmti-10">lrate </span>sets the learning
+rate, which is equivalent to the parameter <span 
+class="cmmi-10">&#x03F5; </span>from the Background section (<a 
+href="#x11-520004.1">4.1<!--tex4ht:ref: background --></a>). <span 
+class="cmti-10">noise</span>
+determines the amount of random variability added to elements of input and target
+patterns, and <span 
+class="cmti-10">temp </span>is used as the denominator of the logistic function to scale
+net inputs with the continuous sigmoid and with the stochastic activation
+function.
+<!--l. 897--><p class="indent" >   There are also several new performance measures displayed on the main window:
+the normalized dot product, <span 
+class="cmti-10">ndp</span>; the normalized vector length measure, <span 
+class="cmti-10">nvl</span>; the
+vector correlation measure, <span 
+class="cmti-10">vcor</span>; the pattern sum of squares, <span 
+class="cmti-10">pss</span>; and the total sum
+of squares, <span 
+class="cmti-10">tss</span>.
+<!--l. 902--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">4.5.1   </span> <a 
+ id="x11-690004.5.1"></a>Commands and Parameters</h4>
+<!--l. 903--><p class="noindent" >Here follows a more detailed description of the new commands and parameters in
+<span 
+class="cmbx-10">pa</span>:
+     <dl class="description"><dt class="description">
+<span 
+class="cmbx-10">newstart</span> </dt><dd 
+class="description">Button  on  the  Network  Viewer,  in  the  train  panel.  It  seeds  the
+     random number with a new random seed, and then returns the program
+     to its initial state before any learning occurred. That is, sets all weights to
+     0, and sets nepochs to 0. Also clears activations and updates the display.
+     </dd><dt class="description">
+<span 
+class="cmbx-10">ptrain</span> </dt><dd 
+class="description">Option under <span 
+class="cmti-10">trainmode </span>in the Train options. This option, when the
+     network is trained, presents each pattern pair in the pattern list once in
+     each epoch. Order of patterns is rerandomized for each epoch.
+     </dd><dt class="description">
+<span 
+class="cmbx-10">reset</span> </dt><dd 
+class="description">Button on the main network window. Same as newstart, but reseeds the
+     random number generator with the same seed that was used last time the
+     network was initialized.
+     </dd><dt class="description">
+<span 
+class="cmbx-10">strain</span> </dt><dd 
+class="description">Option under <span 
+class="cmti-10">trainmode </span>in the Train options. This option, when the
+     network is trained, pairs are presented in the same, fixed order in each
+     epoch.  The  order  is  simply  the  order  in  which  the  pattern  pairs  are
+     encountered in the list.
+                                                                  
+
+                                                                  
+     </dd><dt class="description">
+<span 
+class="cmbx-10">Test all</span> </dt><dd 
+class="description">Radio button on the test panel on the Network Viewer. If this option
+     is checked and testing is run, the network will test each testing pattern in
+     sequence. Pressing the step button will present each one by one for better
+     viewing. If it is not checked, the network will test just the selected test
+     pattern. To select a pattern, click on it in the Testing Patterns frame.
+     </dd><dt class="description">
+<span 
+class="cmbx-10">ecrit</span> </dt><dd 
+class="description">Parameter in Train options. Error criterion for stopping training. If the
+     <span 
+class="cmti-10">tss </span>at the end of an epoch of training is less than this, training stops.
+     </dd><dt class="description">
+<span 
+class="cmbx-10">lflag</span> </dt><dd 
+class="description">Check box in Train options. Normally checked, it enables weight updates
+     during learning.
+     </dd><dt class="description">
+<span 
+class="cmbx-10">nepochs</span> </dt><dd 
+class="description">Number of training epochs conducted each time the run button is
+     pressed.
+     </dd><dt class="description">
+<span 
+class="cmbx-10">Update After</span> </dt><dd 
+class="description">Field in the train and test windows of Network Viewer. Values
+     in the menu are <span 
+class="cmti-10">cycle</span>, <span 
+class="cmti-10">pattern</span>, and <span 
+class="cmti-10">epoch</span>. If the value is <span 
+class="cmti-10">cycle</span>, the screen
+     is updated after processing each pattern and then updated again after the
+     weights are changed. This only applies for training. If the value is <span 
+class="cmti-10">pattern</span>,
+     the screen is only updated after the weights are changed. If the value is
+     <span 
+class="cmti-10">epoch</span>, the screen is updated at the end of each epoch. The number field to
+     the left of this option controls how many cycles, patterns, or epochs occur
+     before an update is made.
+     </dd><dt class="description">
+<span 
+class="cmbx-10">actfunction</span> </dt><dd 
+class="description">Field in Train options or Test options. Select from linear, linear
+     threshold, stochastic, or continuous sigmoid.
+     </dd><dt class="description">
+<span 
+class="cmbx-10">lrule</span> </dt><dd 
+class="description">Field in Train options. Select between the Hebb and Delta update rules.
+     </dd><dt class="description">
+<span 
+class="cmbx-10">lrate</span> </dt><dd 
+class="description">Parameter in Train options. Scales the size of the changes made to the
+     weights. Generally, if there are <span 
+class="cmmi-10">n </span>input units, the learning rate should be
+     less than or equal to 1<span 
+class="cmmi-10">&#x2215;n</span>.
+     </dd><dt class="description">
+<span 
+class="cmbx-10">noise</span> </dt><dd 
+class="description">Parameter in Train and Test options. Range of the random distortion
+     added to each input and target pattern specification value during training
+     and  testing.  The  value  added  is  uniformly  distributed  in  the  interval
+     [<span 
+class="cmsy-10">-</span><span 
+class="cmmi-10">noise,</span>+<span 
+class="cmmi-10">noise</span>].
+                                                                  
+
+                                                                  
+     </dd><dt class="description">
+<span 
+class="cmbx-10">temp</span> </dt><dd 
+class="description">Denominator used in the logistic function to scale net inputs in both the
+     continuous sigmoid and stochastic modes. Generally, temp can be set to
+     1. Note that there is only one cycle of processing in <span 
+class="cmbx-10">pa</span>, so there is no
+     annealing.</dd></dl>
+<!--l. 940--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">4.5.2   </span> <a 
+ id="x11-700004.5.2"></a>State Variables</h4>
+<!--l. 941--><p class="noindent" >Sate variables are all associated with the net structure, and some are available for
+viewing on the Network Viewer. Type &#8220;net&#8221; at the MATLAB command prompt after
+starting an exercise to access these variables.
+     <dl class="description"><dt class="description">
+<span 
+class="cmbx-10">cpname</span> </dt><dd 
+class="description">Name of the current pattern, as given in the pattern file.
+     </dd><dt class="description">
+<span 
+class="cmbx-10">epochno</span> </dt><dd 
+class="description">Number of the current epoch; updated at the beginning of each epoch.
+     </dd><dt class="description">
+<span 
+class="cmbx-10">error</span> </dt><dd 
+class="description">Vectors of errors, or differences between the current target pattern and
+     the current pattern of activation over the output units.
+     </dd><dt class="description">
+<span 
+class="cmbx-10">input</span> </dt><dd 
+class="description">Vector  of  activations  of  the  input  units  in  the  network,  based  on
+     the  current  input  pattern  (subject  to  the  effects  of  noise).  Type
+     net.pool(2).input in the MATLAB command prompt to view this.
+     </dd><dt class="description">
+<span 
+class="cmbx-10">ndp</span> </dt><dd 
+class="description">Normalized dot product of the obtained activation vector over the output
+     units and the target vector.
+     </dd><dt class="description">
+<span 
+class="cmbx-10">netinput</span> </dt><dd 
+class="description">Vector of net inputs to each output unit. Type net.pool(3).netinput
+     in the MATLAB command prompt to view this.
+     </dd><dt class="description">
+<span 
+class="cmbx-10">nvl</span> </dt><dd 
+class="description">Normalized length of the obtained activation vector over the output units.
+     </dd><dt class="description">
+<span 
+class="cmbx-10">output</span> </dt><dd 
+class="description">Vector  of  activations  of  the  output  units  in  the  network.  Type
+     net.pool(3).output to view.
+     </dd><dt class="description">
+<span 
+class="cmbx-10">patno</span> </dt><dd 
+class="description">The  number  of  the  current  pattern,  updated  at  the  beginning  of
+     processing  the  pattern.  Note  that  this  is  the  index  of  the  pattern  on
+     the program&#8217;s pattern list; when <span 
+class="cmti-10">ptrain  </span>is used, it is not the same as
+     the pattern&#8217;s position within the random training sequence in force for a
+     particular epoch.
+                                                                  
+
+                                                                  
+     </dd><dt class="description">
+<span 
+class="cmbx-10">pss</span> </dt><dd 
+class="description">Pattern sum of squares, equal to the sum over all output units of the squared
+     difference between the target for each unit and the obtained activation of
+     the unit.
+     </dd><dt class="description">
+<span 
+class="cmbx-10">target</span> </dt><dd 
+class="description">Vector of target values for output units, based on the current target
+     pattern, subject to effects of noise.
+     </dd><dt class="description">
+<span 
+class="cmbx-10">tss</span> </dt><dd 
+class="description">Total sum of squares, equal to the sum of all patterns so far presented during
+     the current epoch of the pattern sum of squares.
+     </dd><dt class="description">
+<span 
+class="cmbx-10">vcor</span> </dt><dd 
+class="description">Vector correlation of the obtained activation vector over the output units
+     and the target vector.</dd></dl>
+<!--l. 965--><p class="noindent" >
+   <h3 class="sectionHead"><span class="titlemark">4.6   </span> <a 
+ id="x11-710004.6"></a>OVERVIEW OF EXERCISES</h3>
+<!--l. 966--><p class="noindent" >In these exercises, we will study several basic properties of pattern associator
+networks, starting with their tendency to generalize what they have learned to do
+with one input pattern to other similar patterns; we will explore the role of similarity
+and the learning of responses to unseen prototypes. These first studies will be done
+using a completely linear Hebbian pattern associator. Then, we will shift to the linear
+delta rule associator of the kind studied by <a 
+href="handbookli2.html#XKohonen77">Kohonen</a>&#x00A0;(<a 
+href="handbookli2.html#XKohonen77">1977</a>) and analyzed in
+<span 
+class="cmti-10">PDP:11</span>. We will study what these models can and cannot learn and how
+they can be used to learn to get the best estimate of the correct output
+pattern, given noisy input and outputs. Finally, we will examine the acquisition
+of a rule and an exception to the rule in a nonlinear (stochastic) pattern
+associator.
+<a 
+ id="x11-71001r1"></a>
+<!--l. 978--><p class="noindent" >
+   <h4 class="likesubsectionHead"><a 
+ id="x11-720001"></a>Ex4.1. Generalization and Similarity With Hebbian Learning</h4>
+<!--l. 979--><p class="noindent" >In this exercise, you will train a linear Hebbian pattern associator on a single
+input-output pattern pair, and study how its output, after training, is affected by the
+similarity of the input pattern used at test to the input pattern used during
+training.
+<!--l. 984--><p class="indent" >   Open MATLAB, and make sure your path is set to include pdptool and all its
+children, and then move into the pdptool/pa directory. Type &#8220;lin&#8221; at the
+MATLAB command prompt. This sets up the network to be a linear Hebbian
+pattern associator with eight input units and eight output units, starting with
+initial weights that are all 0. The lin.m file sets the value of the learning rate
+                                                                  
+
+                                                                  
+parameter to 0.125, which is equal to 1 divided by the number of units. With this
+value, the Hebb rule will learn an association between a single input pattern
+consisting of all +1s and <span 
+class="cmsy-10">-</span>1s and any desired output pattern perfectly in one
+trial.
+<!--l. 993--><p class="indent" >   The file one.pat is loaded and contains a single pattern (or, more exactly, a
+single input-output pattern pair) to use for training the associator. Both the
+input pattern and the output pattern are eight-element vectors of +1s and
+<span 
+class="cmsy-10">-</span>1s.
+<!--l. 997--><p class="indent" >   Now you can train the network on this first pattern pair for one epoch. Select
+the train panel, and then select <span 
+class="cmti-10">cycle </span>in the train panel. With this option,
+the program will present the first (and, in this case, only) input pattern,
+compute the output based on the current weights, and then display the
+input, output, and target patterns, as well as some summary statistics. If
+you click &#8220;step&#8221; in the train panel, the network will pause after the pattern
+presentation.
+<!--l. 1003--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                  
+
+                                                                  
+<a 
+ id="x11-720014"></a>
+                                                                  
+
+                                                                  
+<!--l. 1005--><p class="noindent" ><a 
+href="ch4_fig4.png" target="_blank" > <img 
+src="ch4_fig4.png" alt="pict"  
+ width="450px"></a>
+<br /> <div class="caption" 
+><span class="id">Figure&#x00A0;4.4: </span><span  
+class="content">Display layout for the first <span 
+class="cmbx-10">pa </span>exercise while processing pattern <span 
+class="cmmi-10">a</span>,
+before any learning has occurred.</span></div><!--tex4ht:label?: x11-720014 -->
+                                                                  
+
+                                                                  
+<!--l. 1008--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 1010--><p class="indent" >   In the upper left corner of the display area, you will see some summary
+information, including the current <span 
+class="cmti-10">ndp</span>, or normalized dot product, of the output
+obtained by the network with the target pattern; the <span 
+class="cmti-10">nvl</span>, or normalized vector
+length, of the obtained output pattern; and the <span 
+class="cmti-10">vcor</span>, or vector correlation, of the
+output with the target. All of these numbers are 0 because the weights are 0, so the
+input produces no output at all. Below these numbers are the <span 
+class="cmti-10">pss</span>, or pattern sum of
+squares, and the <span 
+class="cmti-10">tss</span>, or total sum of squares. They are the sum of squared differences
+between the target and the actual output patterns. The first is summed over all
+output units for the current pattern, and the second is summed over all patterns
+so far encountered within this epoch (they are, therefore, identical at this
+point).
+<!--l. 1023--><p class="indent" >   Below these entries you will see the weight matrix on the left, with the input
+vector that was presented for processing below it and the output and target
+vectors to the right. The display uses shade of red for positive values and
+shades of blue for negative values as in previous models. A value of +1 or <span 
+class="cmsy-10">-</span>1
+is not very saturated, so that a value can be distinguished over a larger
+range.
+<!--l. 1027--><p class="indent" >   The window of the right of the screen shows the patterns in use for training or
+test, whichever is selected. Input and target patterns are separated by a vertical
+separator. You will see that the input pattern shown below the weights matches the
+single input pattern shown on the right panel and that the target pattern shown to
+the right of the weights matches the single target pattern to the right of the vertical
+separator.
+<!--l. 1030--><p class="indent" >   If you click step a second time, the target will first be clamped onto the output
+units, then the weights will be updated according to the Hebbian learning
+rule:
+   <table 
+class="equation"><tr><td><a 
+ id="x11-72002r25"></a>
+   <center class="math-display" >
+<img 
+src="handbook66x.png" alt="&#x0394;wij = (lrate)oiij
+" class="math-display" ></center></td><td class="equation-label">(4.25)</td></tr></table>
+<!--l. 1035--><p class="nopar" >
+ <a 
+ id="x11-72003r1"></a> Q.4.1.1.
+     <div class="quote">
+                                                                  
+
+                                                                  
+     <!--l. 1036--><p class="noindent" >Explain the values of the weights in rows 2 and 3 (counting from
+     1, which is the convention in MATLAB). Explain the values of the
+     weights in column 8, the last column of the matrix. You can examine
+     the weight values by rolling over them. </div>
+<!--l. 1041--><p class="indent" >   Now, with just this one trial of learning, the network will have &#8220;mastered&#8221; this
+particular association, so that if you test it at this point, you will find that, given the
+learned input, it perfectly reproduces the target. You can test the network using the
+test command. Simply select the test panel, then click step. In this particular
+case the display will not change much because in the previous display the
+output had been clamped to reflect the very target pattern that the network
+has now computed. The only thing that actually changes in the display
+are the <span 
+class="cmti-10">ndp</span>, <span 
+class="cmti-10">vcor</span>, and <span 
+class="cmti-10">nvl </span>fields; these will now reflect the normalized dot
+product and correlation of the computed output with the target and the
+normalized length of the output. They should all be equal to 1.0 at this
+point.
+<!--l. 1053--><p class="indent" >   You are now ready to test the generalization performance of the network. You can
+enter patterns into a file. Start by opening the &#8220;one.pat&#8221; file, copy the existing
+pattern and paste several times in a new .pat file. Save this file as &#8220;gen.pat&#8221;. Edit the
+input pattern entries for the patterns and give each pattern its own name. See
+Q.<a 
+href="#x11-72004r2">4.1.2<!--tex4ht:ref: q412 --></a> for information on the patterns to enter. Leave the target part of the patterns
+the same. Then, click Test options, click Load new, and load the new patterns for
+testing.
+<a 
+ id="x11-72004r2"></a>
+<!--l. 1056--><p class="indent" >   Q.4.1.2.
+     <div class="quote">
+     <!--l. 1057--><p class="noindent" >Try  at  least  4  different  input  patterns,  testing  each  against  the
+     original target. Include in your set of patterns one that is orthogonal
+     to the training pattern and one that is perfectly anticorrelated with
+     it, as well as one or two others with positive normalized dot products
+     with  the  input  pattern.  Report  the  input  patterns,  the  output
+     pattern produced, and the <span 
+class="cmti-10">ndp</span>, <span 
+class="cmti-10">vcor</span>, and <span 
+class="cmti-10">nvl </span>in each case. Relate
+     the obtained output to the specifics of the weights and the input
+     patterns used and to the discussion in the &#8220;Background&#8221; section
+     (<a 
+href="#x11-520004.1">4.1<!--tex4ht:ref: background --></a>) about the test output we should get from a linear Hebbian
+     associator, as a function of the normalized dot product of the input
+     vector used at test and the input vector used during training. </div>
+<!--l. 1071--><p class="indent" >   If you understand the results you have obtained in this exercise, you understand
+the basis of similarity-based generalization in one-layer associative networks. In the
+process, you should come to develop your intuitions about vector similarity and
+to clearly be able to distinguish uncorrelated patterns from anticorrelated
+ones.
+                                                                  
+
+                                                                  
+<a 
+ id="x11-72005r2"></a>
+   <h4 class="likesubsectionHead"><a 
+ id="x11-730002"></a>Ex4.2. Orthogonality, Linear Independence, and Learning</h4>
+<!--l. 1078--><p class="noindent" >This exercise will expose you to the limitation of a Hebbian learning scheme and
+show how this limitation can be overcome using the delta rule. For this
+exercise, you are to set up two different sets of training patterns: one in which
+all the input patterns form an orthogonal set and the other in which they
+form a linearly independent, but not orthogonal, set. For both cases, choose
+the output patterns so that they form an orthogonal set, then arbitrarily
+assign one of these output patterns to go with each input pattern. In both
+cases, use only three pattern pairs and make sure that both patterns in
+each pair are eight elements long. The pattern files you construct in each
+case should contain three lines formatted like the single line in the <span 
+class="cmti-10">one.pat</span>
+file:
+                                                                  
+
+                                                                  
+   <div class="verbatim" id="verbatim-62">
+first&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;1.0&#x00A0;-1.0&#x00A0;1.0&#x00A0;-1.0&#x00A0;1.0&#x00A0;-1.0&#x00A0;1.0&#x00A0;-1.0&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;1.0&#x00A0;1.0&#x00A0;-1.0&#x00A0;-1.0&#x00A0;1.0&#x00A0;1.0&#x00A0;-1.0&#x00A0;-1.0
+</div>
+<!--l. 1091--><p class="nopar" >
+<!--l. 1093--><p class="indent" >   We provide sets of patterns that meet these conditions in the two files <span 
+class="cmti-10">ortho.pat</span>
+and <span 
+class="cmti-10">li.pat</span>. However, we want you to make up your own patterns. Save both sets for
+your use in the exercises in files called <span 
+class="cmti-10">myortho.pat </span>and <span 
+class="cmti-10">myli.pat</span>. For each set of
+patterns, display the patterns in a table, then answer each of the next two
+questions.
+<a 
+ id="x11-73001r1"></a>
+<!--l. 1109--><p class="indent" >   Q.4.2.1.
+     <div class="quote">
+     <!--l. 1109--><p class="noindent" >Read  in  the  patterns  using  the  &#8220;Load  New&#8221;  option  in  both  the
+     Train and Test options, separately. Reset the network (this clears
+     the weights to 0s). Then run one epoch of training using the Hebbian
+     learning rule by pressing the &#8220;Run&#8221; button. What happens with each
+     pattern? Run three additional epochs of training (one at a time),
+     testing all the patterns after each epoch. What happens? In what
+     ways do things change? In what ways do they stay the same? Why?
+     </div>
+<a 
+ id="x11-73002r2"></a>
+<!--l. 1123--><p class="indent" >   Q.4.2.2.
+     <div class="quote">
+     <!--l. 1123--><p class="noindent" >Turn  off  Hebb  mode  in  the  program  by  enabling  the  delta  rule
+     under Train options, and try the above experiment again. Make sure
+     to reset the weights before training. Describe the similarities and
+     differences between the results obtained with the various measures
+     (concentrate on <span 
+class="cmti-10">ndp </span>and <span 
+class="cmti-10">tss</span>) and explain in terms of the differential
+     characteristics of the Hebbian and delta rule learning schemes. </div>
+<!--l. 1134--><p class="indent" >   For the next question, reset your network, and load the pattern set in the file
+<span 
+class="cmti-10">li.pat </span>for both training and testing. Run one epoch of training using the Hebb rule,
+and save the weights, using a command like:
+                                                                  
+
+                                                                  
+   <div class="verbatim" id="verbatim-63">
+liHebbwts&#x00A0;=&#x00A0;net.pool(3).proj(1).weight
+</div>
+<!--l. 1139--><p class="nopar" > Then press <span 
+class="cmti-10">reset </span>again, and switch to the delta rule. Run one epoch of training at
+a time, and examine performance at the end of each epoch by testing all
+patterns.
+<a 
+ id="x11-73003r3"></a>
+<!--l. 1154--><p class="indent" >   Q.4.2.3.
+     <div class="quote">
+     <!--l. 1154--><p class="noindent" >In <span 
+class="cmti-10">li.pat</span>, one of the input patterns is orthogonal to both of the others,
+     which are partially correlated with each other. When you test the
+     network at the end of one epoch of training, the network exhibits
+     perfect performance on two of the three patterns. Which pattern
+     is not perfectly correct? Explain why the network is not perfectly
+     correct on this pattern and why it is perfectly correct on the other
+     two patterns. </div>
+<!--l. 1171--><p class="indent" >   Keep running training epochs using the delta rule until the <span 
+class="cmti-10">tss </span>measure drops
+below 0.01. Store the weights in a variable, such as liDeltawts, so that you can
+display them numerically.
+<a 
+ id="x11-73004r4"></a>
+<!--l. 1176--><p class="indent" >   Q.4.2.4.
+     <div class="quote">
+     <!--l. 1177--><p class="noindent" >Examine and explain the resulting weight matrix, contrasting it with
+     the weight matrix obtained after one cycle of Hebbian learning with
+     the same patterns (these are the weights you saved before). What are
+     the similarities between the two matrices? What are the differences?
+     For one thing, take note of the weight to output unit 1 from input
+     unit 1, and the weight to output unit 8 to input unit 8. These are
+     the same under the Hebb rule, but different under the Delta rule.
+     Why? Make sure you find other differences, and explain them as
+     well. For all of the differences you notice, try to explain rather than
+     just describe the differences. </div>
+<!--l. 1189--><p class="noindent" ><span 
+class="cmti-10">Hint.</span>
+                                                                  
+
+                                                                  
+     <div class="quote">
+     <!--l. 1190--><p class="noindent" >To answer this question fully, you will need to refer to the patterns.
+     Remember that in the Hebb rule, each weight is just the sum of the
+     co-products of corresponding input and output activations, scaled
+     by the learning rate parameter. But this is far from the case with the
+     Delta rule, where weights can compensate for one another, and where
+     such things as a division of labor can occur. You can fully explain the
+     weights learned by the Delta rule, if you take note of the fact that all
+     eight input units contribute to the activation of each of the output
+     units. You can consider each output unit independently, however,
+     since the error measure treats each output unit independently. </div>
+<!--l. 1202--><p class="noindent" >As the final exercise in this set, construct a set of input-output pattern pairs that cannot
+be learned by a delta rule network, referring to the <span 
+class="cmti-10">linear independence requirement</span>
+and the text in Section <span 
+class="cmbx-10">4.2.3 </span>to help you construct an unlearnable set of patterns.
+Full credit will be given for sets containing more than 2 patterns, such that with all
+but one of the patterns, the set can be learned, but with all three, the set cannot be
+learned.
+<a 
+ id="x11-73005r5"></a>
+<!--l. 1211--><p class="indent" >   Q.4.2.5.
+     <div class="quote">
+     <!--l. 1212--><p class="noindent" >Present your set of patterns, explain why they cannot be learned,
+     and describe what happens when the network tries to learn them,
+     both in terms of the time course of learning and in terms of the
+     weights that result. </div>
+<!--l. 1220--><p class="indent" >   <span 
+class="cmti-10">Hint.</span>
+     <div class="quote">
+     <!--l. 1221--><p class="noindent" >We provide a set of impossible pattern pairs in the file <span 
+class="cmti-10">imposs.pat</span>,
+     but, once again, you should construct your own. When you examine
+     what happens during learning, you will probably want to use a small
+     value of the learning rate; this affects the size of the oscillations that
+     you will probably observe in the weights. A learning rate of 0.0125
+     or less is probably good. Keep running more training epochs until
+     the <span 
+class="cmti-10">tss </span>at the end of each epoch stabilizes. </div>
+<a 
+ id="x11-73006r3"></a>
+                                                                  
+
+                                                                  
+<!--l. 1230--><p class="noindent" >
+   <h4 class="likesubsectionHead"><a 
+ id="x11-740003"></a>Ex4.3. Learning Central Tendencies</h4>
+<!--l. 1231--><p class="noindent" >One of the positive features of associator models is their ability to filter out noise in
+their environments. In this exercise we invite you to explore this aspect of pattern
+associator networks. For this exercise, you will still be using linear units but with the
+delta rule and with a relatively small learning rate. You will also be introducing noise
+into your training patterns.
+<!--l. 1237--><p class="indent" >   For this exercise, exit the PDP program and then restart it by typing <span 
+class="cmbx-10">ct </span>at the
+command prompt (<span 
+class="cmbx-10">ct </span>is for &#8220;central tendency&#8221;). This file sets the learning rate to
+0.0125 and uses the Delta rule. It also sets the noise variable to 0.5. This means that
+each element in each input pattern and in each target pattern will have its activation
+distorted by a random amount uniformly distributed between +0<span 
+class="cmmi-10">.</span>5 and
+<span 
+class="cmsy-10">-</span>0<span 
+class="cmmi-10">.</span>5.
+<!--l. 1244--><p class="indent" >   Then load in a set of patterns (your orthogonal set from Ex. <a 
+href="#x11-730002">4.2<!--tex4ht:ref: ex42 --></a> or the patterns in
+<span 
+class="cmti-10">ortho.pat</span>). Then you can see how well the model can do at pulling out the &#8220;signals&#8221;
+from the &#8220;noise.&#8221; The clearest way to see this is by studying the weights themselves
+and comparing them to the weights acquired with the same patterns without noise
+added. You can also test with noise turned off; in fact as loaded, noise is turned off
+for testing, so running a test allows you to see how well the network can do with
+patterns without noise added.
+<a 
+ id="x11-74001r1"></a>
+<!--l. 1250--><p class="indent" >   Q.4.3.1.
+     <div class="quote">
+     <!--l. 1251--><p class="noindent" >Compare learning of the three orthogonal patterns you used in Ex.
+     <a 
+href="#x11-730002">4.2<!--tex4ht:ref: ex42 --></a> without noise, to the learning that occurs in this exercise, with
+     noise added. Compare the weight matrix acquired after &#8220;noiseless&#8221;
+     learning with the matrix that evolves given the noisy input-target
+     pairs that occur in the current situation. Run about 60 epochs of
+     training to get an impression of the evolution of the weights through
+     the course of training and compare the results to what happens with
+     errorless training patterns (and a higher learning rate). What effect
+     does changing the learning rate have when there is noise? Try higher
+     and lowers values. You should interleave training and testing, and
+     use up to 1000 epochs when using very low learning rates.
+     <!--l. 1262--><p class="noindent" >We have provided a pop-up graph that will show how the <span 
+class="cmti-10">tss </span>changes
+     over time. A new graph is created each time you start training after
+     resetting the network. </div>
+<!--l. 1265--><p class="indent" >   <span 
+class="cmti-10">Hint.</span>
+     <div class="quote">
+                                                                  
+
+                                                                  
+     <!--l. 1265--><p class="noindent" >You may find it useful to rerun the relevant part of Ex. <a 
+href="#x11-730002">4.2<!--tex4ht:ref: ex42 --></a> (Q. <a 
+href="#x11-73002r2">4.2.2<!--tex4ht:ref: q422 --></a>).
+     You can save the weights you obtain in the different runs as before,
+     e.g.
+                                                                  
+
+                                                                  
+     <div class="verbatim" id="verbatim-64">
+nonoisewts&#x00A0;=&#x00A0;pool(3).proj(1).weight;
+</div>
+     <!--l. 1269--><p class="nopar" > For longer runs, remember that you can set <span 
+class="cmti-10">Epochs </span>in Train options to a
+     number larger than the default value to run more epochs for each press of
+     the &#8220;Run&#8221; button. </div>
+<!--l. 1274--><p class="indent" >   The results of this simulation are relevant to the theoretical analyses described in
+<span 
+class="cmti-10">PDP:11 </span>and are very similar to those described under &#8220;central tendency learning&#8221; in
+<span 
+class="cmti-10">PDP:25</span>, where the effects of amnesia (taken as a reduction in connection strength)
+are considered.
+<a 
+ id="x11-74002r4"></a>
+<!--l. 1279--><p class="noindent" >
+   <h4 class="likesubsectionHead"><a 
+ id="x11-750004"></a>Ex4.4. Lawful Behavior</h4>
+<!--l. 1281--><p class="noindent" >We now turn to one of the principle characteristics of pattern associator models that
+has made us take interest in them: their ability to pick up regularities in a set of
+input-output pattern pairs. The ability of pattern associator models to do this is
+illustrated in the past-tense learning model, discussed in <span 
+class="cmti-10">PDP:18</span>. Here we provide
+the opportunity to explore this aspect of pattern associator models, using the
+example discussed in that chapter, namely, the <span 
+class="cmti-10">rule of 78 </span>(see <span 
+class="cmti-10">PDP:18</span>, pp. 226-234).
+We briefly review this example here.
+<!--l. 1290--><p class="indent" >   The rule of 78 is a simple rule we invented for the sake of illustration.
+The rule first defines a set of eight-element input patterns. In each input
+pattern, one of units 1, 2, and 3 must be on; one of units 4, 5, and 6 must
+be on; and one of units 7 and 8 must be on. For the sake of consistency
+with <span 
+class="cmti-10">PDP:18</span>, we adopt the convention for this example only of numbering
+units starting from 1. The rule of 78 also defines a mapping from input to
+output patterns. For each input pattern, the output pattern that goes with it
+is the same as the input pattern, except that if unit 7 is on in the input
+pattern, unit 8 is on in the output and vice versa. Figure <a 
+href="#x11-750015">4.5<!--tex4ht:ref: table1 --></a> shows this
+rule.
+<!--l. 1300--><p class="indent" >   <hr class="figure"><div class="figure" 
+>
+                                                                  
+
+                                                                  
+<a 
+ id="x11-750015"></a>
+                                                                  
+
+                                                                  
+<!--l. 1302--><p class="noindent" ><a 
+href="ch4_tab1.png" target="_blank" > <img 
+src="ch4_tab1.png" alt="pict"  
+ width="450px"></a>
+<br /> <div class="caption" 
+><span class="id">Figure&#x00A0;4.5: </span><span  
+class="content">Specification of the Rule of 78. From <span 
+class="cmti-10">PDP:18</span>, p. 229.</span></div><!--tex4ht:label?: x11-750015 -->
+                                                                  
+
+                                                                  
+<!--l. 1305--><p class="indent" >   </div><hr class="endfigure">
+<!--l. 1307--><p class="indent" >   The rule of 78 defines 18 input-output pattern pairs. Eighteen <span 
+class="cmti-10">arbitrary</span>
+input-output pattern pairs would exceed the capacity of an eight-by-eight pattern
+associator, but as we shall see, the patterns that exemplify the rule of 78 can easily
+be learned by the network.
+<!--l. 1312--><p class="indent" >   The version of the pattern associator used for this example follows the
+assumptions we adopted in <span 
+class="cmti-10">PDP:18 </span>for the past-tense learning model. Input units
+are binary and are set to 1 or 0 according to the input pattern. The output units are
+binary, stochastic units and take on activation values of 0 or 1 with probability given
+by the logistic function:
+   <table 
+class="equation"><tr><td><a 
+ id="x11-75002r26"></a>
+   <center class="math-display" >
+<img 
+src="handbook67x.png" alt="p(acti = 1) =----1-----
+           1 + e-neti&#x2215;T
+" class="math-display" ></center></td><td class="equation-label">(4.26)</td></tr></table>
+<!--l. 1319--><p class="nopar" >
+where <span 
+class="cmmi-10">T </span>is equivalent to the <span 
+class="cmti-10">Temp </span>parameter in Train and Test options. Note that,
+although this function is the same as for the Boltzmann machine, the calculation of
+the output is only done once, as in other versions of the pattern associator; there is
+no annealing, so <span 
+class="cmti-10">Temp </span>is just a scaling factor.
+<!--l. 1325--><p class="indent" >   Learning occurs according to the delta rule, which in this case is equivalent to the
+perceptron convergence procedure because the units are binary. Thus, when an
+output unit should be on (target is 1) but is not (activation is 0), an increment of size
+<span 
+class="cmti-10">lrate </span>is added to the weight coming into that unit from each input unit that is on.
+When an output unit should be off (target is 0) but is not (activation is 1), an
+increment of size <span 
+class="cmti-10">lrate </span>is subtracted from the weight coming into that unit from each
+input unit that is on.
+<!--l. 1334--><p class="indent" >   For this example, we follow <span 
+class="cmti-10">PDP:18 </span>and use <span 
+class="cmti-10">Temp </span>of 1 and a learning rate of .05.
+(The simulations that you will do here will not conform to the example
+in <span 
+class="cmti-10">PDP:18 </span>in all details, since in that example an approximation to the
+logistic function was used. The basic features of the results are the same,
+however.)
+<!--l. 1339--><p class="indent" >   To run this example, exit the PDP system if running, and then enter
+                                                                  
+
+                                                                  
+   <div class="verbatim" id="verbatim-65">
+seventy_eight
+</div>
+<!--l. 1342--><p class="nopar" > at the command prompt. This will read in the appropriate network specification file
+(in <span 
+class="cmti-10">8X8.net</span>) and the 18 patterns that exemplify the rule of 78, then display these
+on the screen to the right of the weight matrix. Since the units are binary,
+there is only a single digit of precision for both the input, output, and target
+units.
+<!--l. 1348--><p class="indent" >   You should now be ready to run the exercise. The variable <span 
+class="cmti-10">Epochs </span>is initialized to
+10, so if you press the Run button, 10 epochs of training will be run. We recommend
+using <span 
+class="cmti-10">ptrain </span>because it does not result in a consistent bias in the weights favoring the
+patterns later in the pattern list. If you want to see the screen updated once per
+pattern, set the Update After field in the train panel to be &#8220;pattern&#8221; instead of
+&#8220;epoch.&#8221; If &#8220;pattern&#8221; is selected, the screen is updated once per pattern
+after the weights have been adjusted, so you should see the weights and the
+input, output, and target bits changing. The <span 
+class="cmti-10">pss </span>and <span 
+class="cmti-10">tss </span>(which in this case
+indicate the number of incorrect output bits) will also be displayed once per
+pattern.
+<a 
+ id="x11-75003r1"></a>
+<!--l. 1357--><p class="indent" >   Q.4.4.1.
+     <div class="quote">
+     <!--l. 1357--><p class="noindent" >At the end of the 10th epoch, the <span 
+class="cmti-10">tss </span>should be in the vicinity of 30, or
+     about 1.5 errors per pattern. Given the values of the weights and the
+     fact that Temp is set to 1, calculate the net input to the last
+     output unit for the first two input patterns, and calculate the
+     approximate probability that this last output unit will receive the
+     correct activation in each of these two patterns. MATLAB will
+     calculate this probability if you enter it into the logistic function
+     yourself:
+                                                                  
+
+                                                                  
+     <div class="verbatim" id="verbatim-66">
+p&#x00A0;=&#x00A0;1/(1+exp(-net.pool(3).netinput(8)))
+</div>
+     <!--l. 1366--><p class="nopar" > </div>
+<!--l. 1369--><p class="indent" >   At this point you should be able to see the solution to the rule of 78 patterns
+emerging. Generally, there are large positive weights between input units and
+corresponding output units, with unit 7 exciting unit 8 and unit 8 exciting unit 7.
+You&#8217;ll also see rather large inhibitory weights from each input unit to each
+other unit within the same subgroup (i.e., 1, 2, and 3; 4, 5, and 6; and 7
+and 8). Run another 40 or so epochs, and a subtler pattern will begin to
+emerge.
+<a 
+ id="x11-75004r2"></a>
+<!--l. 1377--><p class="indent" >   Q.4.4.2.
+     <div class="quote">
+     <!--l. 1377--><p class="noindent" >Generally there will be slightly negative weights from input units to
+     output units in other subgroups. See if you can understand why this
+     happens. Note that this does not happen reliably for weights coming
+     into output units 7 and 8. Your explanation should explain this too.
+     </div>
+<!--l. 1384--><p class="indent" >   At this point, you have watched a simple PDP network learn to behave in
+accordance with a simple rule, using a simple, local learning scheme; that is, it
+adjusts the strength of each connection in response to its errors on each particular
+learning experience, and the result is a system that exhibits lawful behavior in the
+sense that it conforms to the rule.
+<!--l. 1390--><p class="indent" >   For the next part of the exercise, you can explore the way in which this kind of
+pattern associator model captures the three-stage learning phenomenon exhibited by
+young children learning the past tense in the course of learning English as their first
+language. To briefly summarize this phenomenon: Early on, children know only a few
+words in the past tense. Many of these words happen to be exceptions, but at this
+point children tend to get these words correct. Later in development, children begin
+to use a much larger number of words in the past tense, and these are predominantly
+regular. At this stage, they tend to overregularize exceptions. Gradually, over the
+course of many years, these exceptions become less frequent, but adults
+have been known to say things like ringed or taked, and lower-frequency
+exceptions tend to lose their exceptionality (i.e., to become regularized) over
+time.
+                                                                  
+
+                                                                  
+<!--l. 1404--><p class="indent" >   The 78 model can capture this pattern of results; it is interesting to see it do this
+and understand how and why this happens. For this part of the exercise, you
+will want to reset the weights, and read in the file <span 
+class="cmti-10">hf.pat</span>, which contains a
+exception pattern (147<span 
+class="cmsy-10">-&#x2192;</span>147) and one regular pattern (258<span 
+class="cmsy-10">-&#x2192;</span>257). If we
+imagine that the early experience of the child consists mostly of exposure to
+high-frequency words, a large fraction of which are irregular (8 of the 10 most
+frequent verbs are irregular), this approximates the early experience the
+child might have with regular and irregular past-tense forms. If you run 30
+epochs of training using <span 
+class="cmti-10">ptrain </span>with these two patterns, you will see a set of
+weights that allows the model to often set each output bit correctly, but
+not reliably. At this point, you can read in the file <span 
+class="cmti-10">all.pat</span>, which contains
+these two pattern pairs, plus all of the other pairs that are consistent with
+the rule of 78. This file differs from the <span 
+class="cmti-10">78.pat </span>file only in that the input
+pattern <span 
+class="cmti-10">147 </span>is associated with the &#8220;exceptional&#8221; output pattern <span 
+class="cmti-10">147 </span>instead of
+what would be the &#8220;regular&#8221; corresponding pattern <span 
+class="cmti-10">148</span>. Save the weights
+that resulted from learning <span 
+class="cmti-10">hf.pat</span>. Then read in <span 
+class="cmti-10">all.pat </span>and run 10 more
+epochs.
+<a 
+ id="x11-75005r3"></a>
+<!--l. 1422--><p class="indent" >   Q.4.4.3.
+     <div class="quote">
+     <!--l. 1423--><p class="noindent" >Given the weights that you see at this point, what is the network&#8217;s
+     most probable response to <span 
+class="cmti-10">147</span>? Can you explain why the network
+     has lost the ability to produce <span 
+class="cmti-10">147  </span>as its response to this input
+     pattern? What has happened to the weights that were previously
+     involved in producing <span 
+class="cmti-10">147 </span>from <span 
+class="cmti-10">147</span>? </div>
+<!--l. 1430--><p class="indent" >   One way to think about what has happened in learning the <span 
+class="cmti-10">all.pat </span>stimuli is that
+the 17 regular patterns are driving the weights in one direction and the single
+exception pattern is fighting a lonely battle to try to drive the weights in a
+different direction, at least with respect to the activation of units 7 and 8.
+Since eight of the input patterns have unit 7 on and &#8220;want&#8221; output unit 8
+to be on and unit 7 to be off and only one input pattern has input unit 7
+on and wants output unit 7 on and output unit 8 off, it is hardly a fair
+fight.
+<!--l. 1439--><p class="indent" >   If you run more epochs (upwards of 300), though, you will find that
+the network eventually finds a compromise solution that satisfies all of the
+patterns.
+<a 
+ id="x11-75006r4"></a>
+<!--l. 1442--><p class="indent" >   Q.4.4.4.
+     <div class="quote">
+                                                                  
+
+                                                                  
+     <!--l. 1443--><p class="noindent" >Although it takes a fair number of epochs, run the model until it
+     finds a set of weights that gets each output unit correct about 90%
+     of the time for each input pattern (90% correct corresponds to a net
+     input of about 2 or so for units that should be on and <span 
+class="cmsy-10">-</span>2 for units
+     that should be off). Explain why it takes so long to get to this point.
+     </div>
+<a 
+ id="x11-75007r5"></a>
+   <h4 class="likesubsectionHead"><a 
+ id="x11-760005"></a>Ex4.5. Learning quasi-regular exceptions</h4>
+<!--l. 1452--><p class="noindent" ><a 
+href="handbookli2.html#XPinkerUllman02">Pinker and Ullman</a>&#x00A0;(<a 
+href="handbookli2.html#XPinkerUllman02">2002</a>) argue for a two-system model, in which a connectionist
+like system deals with exceptions, but there is a separate &#8220;procedural&#8221; system for
+rules. Consider the response to this position contained in the short reply to <a 
+href="handbookli2.html#XPinkerUllman02">Pinker
+and Ullman</a>&#x00A0;(<a 
+href="handbookli2.html#XPinkerUllman02">2002</a>) by <a 
+href="handbookli2.html#XMcClellandPatterson02resp">McClelland and Patterson</a>&#x00A0;(<a 
+href="handbookli2.html#XMcClellandPatterson02resp">2002</a>).
+<a 
+ id="x11-76001r1"></a>
+<!--l. 1458--><p class="indent" >   Q.4.5.1.
+     <div class="quote">
+     <!--l. 1458--><p class="noindent" >Express  the  position  taken  by  <a 
+href="handbookli2.html#XMcClellandPatterson02resp">McClelland  and  Patterson</a>.  Now,
+     consider  whether  the  seventy-eight  model  is  sensitive  to  (and
+     benefits from) quasi-regularity in exceptions. Compare learning of
+     quasi-regular  vs.  truly  arbitrary  exceptions  to  the  rule  of  78  by
+     creating two new training sets from the fully regular <span 
+class="cmti-10">seventy-eight.pat</span>
+     training set. Create a quasi-regular training set by modifying the
+     output patterns of 2-3 of the items so that they are quasi-regular,
+     as defined by <a 
+href="handbookli2.html#XMcClellandPatterson02resp">McClelland and Patterson</a>. Create a second training
+     set with 2-3 arbitrary exceptions by assigning completely arbitrary
+     output  patterns  to  the  same  2-3  input  patterns.  Carry  out
+     training experiments with both training sets. Report differences in
+     learnability, training time, and pattern of performance for these two
+     different sets of items, and discuss whether (and how) your results
+     support the idea that the PDP model explains why exceptions tend
+     to be quasi-regular rather than completely arbitrary. </div>
+<!--l. 1476--><p class="noindent" >
+   <h4 class="subsectionHead"><span class="titlemark">4.6.1   </span> <a 
+ id="x11-770004.6.1"></a>Further Suggestions for Exercises</h4>
+<!--l. 1478--><p class="noindent" >There are other exercises for further exploration. In the 78 exercise just described,
+there was only one exception pattern, and when vocabulary size increased, the ratio
+of regular to exception patterns increased from 1:1 to 17:1. <a 
+href="handbookli2.html#XPinkerPrince88">Pinker and Prince</a>&#x00A0;(<a 
+href="handbookli2.html#XPinkerPrince88">1988</a>)
+                                                                  
+
+                                                                  
+have shown that, in fact, as vocabulary size increases, the ratio of regular to
+exception verbs stays roughly constant at 1:1. One interesting exercise is to set up an
+analog of this situation. Start training the network with one regular and one
+exception pattern, then increase the &#8220;vocabulary&#8221; by introducing new regular
+patterns and new exceptions. Note that each exception should be idiosyncratic;
+if all the exceptions were consistent with each other, they would simply
+exemplify a different rule. You might try an exercise of this form, setting up your
+own correspondence rules, your own exceptions, and your own regime for
+training.
+<!--l. 1492--><p class="indent" >   You can also explore other variants of the pattern associator with other kinds of
+learning problems. One thing you can do easily is see whether the model can learn
+to associate each of the individuals from the Jets and Sharks example in
+Chapter <a 
+href="handbookch3.html#x7-190002">2<!--tex4ht:ref: ch2_total --></a> with the appropriate gang (relying only on their properties, not
+their names; the files <span 
+class="cmti-10">jets.tem</span>, <span 
+class="cmti-10">jets.net</span>, and <span 
+class="cmti-10">jets.pat </span>are available for this
+purpose). Also, you can play with the continuous sigmoid (or logistic) activation
+function.
+                                                                  
+
+                                                                  
+                                                                  
+
+                                                                  
+                                                                  
+
+                                                                  
+   <!--l. 1--><div class="crosslinks"><p class="noindent"><a 
+href="handbookch6.html" ><span 
+class="cmsy-7">&#x21D2;</span></a><a 
+href="handbookch4.html" ><span 
+class="cmsy-7">&#x21D0;</span></a><a 
+href="handbook3.html#handbookch5.html" ><span 
+class="cmsy-7">&#x21D1;</span></a></p></div>
+<!--l. 1--><p class="indent" >   <a 
+ id="tailhandbookch5.html"></a>   
+</body></html> 
